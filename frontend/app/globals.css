@@ -1,15 +1,26 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F9FAFB;
+  --foreground: #000000;
+
+  --color-light-orange: #FFE8D9;
+  --color-dark-orange: #D3590B;
+  --color-black: #1F1F1F;
+
+  --color-status-todo-bg: #FFE0E0;
+  --color-status-todo-text: #EF4444;
+  --color-status-progress-bg: #FFF0D7;
+  --color-status-progress-text: #E08D00;
+  --color-status-done-bg: #F1FFF7;
+  --color-status-done-text: #27AE60;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-inter);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,8 +30,23 @@
   }
 }
 
+html {
+  font-family: var(--font-inter), sans-serif;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.title,
+.heading {
+  font-family: var(--font-manrope), sans-serif;
 }
