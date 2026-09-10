@@ -20,12 +20,19 @@ import { specs } from "./config/swagger";
 // Prisma singleton
 import prisma from "./lib/prisma";
 
+// Cookie parser
+import cookieParser from "cookie-parser";
+
+
 // Charger les variables d'environnement
 dotenv.config();
 
 // Créer l'application Express
 const app = express();
 const PORT = process.env.PORT || 8000;
+
+// Middleware pour parser les cookies
+app.use(cookieParser());
 
 // Middleware de sécurité
 app.use(helmet());

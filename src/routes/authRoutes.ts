@@ -5,6 +5,7 @@ import {
   getProfile,
   updateProfile,
   updatePassword,
+  logout,
 } from "../controllers/authController";
 import { authenticateToken } from "../middleware/auth";
 
@@ -25,7 +26,7 @@ router.post("/register", register);
  * @body    { email: string, password: string }
  */
 router.post("/login", login);
-
+router.post("/logout", logout);
 /**
  * @route   GET /auth/profile
  * @desc    Récupérer le profil de l'utilisateur connecté

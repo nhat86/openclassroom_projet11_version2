@@ -134,7 +134,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     });
 
     // Générer le token JWT
-    const token = generateToken(newUser.id, newUser.email);
 
     // Envoyer la réponse
     sendSuccess(
@@ -142,7 +141,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       "Utilisateur créé avec succès",
       {
         user: newUser,
-        token,
       },
       201
     );
@@ -248,6 +246,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const token = generateToken(user.id, user.email);
 
     // Préparer les données utilisateur pour la réponse
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 1000,
+    });
+
     const userData = {
       id: user.id,
       email: user.email,
@@ -258,7 +263,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     // Envoyer la réponse
     sendSuccess(res, "Connexion réussie", {
       user: userData,
-      token,
     });
   } catch (error) {
     console.error("Erreur lors de la connexion:", error);
@@ -458,4 +462,20 @@ export const updatePassword = async (
     console.error("Erreur lors de la mise à jour du mot de passe:", error);
     sendServerError(res, "Erreur lors de la mise à jour du mot de passe");
   }
+};
+// logout function
+export const logout = (
+  req: Request,
+  res: Response
+): void => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  });
+
+  sendSuccess(
+    res,
+    "Déconnexion réussie"
+  );
 };
