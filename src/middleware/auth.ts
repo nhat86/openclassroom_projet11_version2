@@ -14,8 +14,9 @@ export const authenticateToken = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Extraire le token du header Authorization
-    const token = res.cookies.token;
+    const tokenFromCookie = req.cookies?.token;
+    const tokenFromHeader = extractTokenFromHeader(req.headers.authorization);
+    const token = tokenFromCookie ?? tokenFromHeader;
 
     if (!token) {
       sendAuthError(res, "Token d'authentification manquant");
@@ -70,7 +71,7 @@ export const optionalAuth = async (
 ): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
-    const token = req.cookies.token;
+    const token = req.cookies?.token ?? extractTokenFromHeader(authHeader);
 
     if (!token) {
       next();

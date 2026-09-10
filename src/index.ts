@@ -38,12 +38,25 @@ app.use(cookieParser());
 app.use(helmet());
 
 // Middleware CORS
+const devOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://localhost:5173",
+  "http://localhost:8000",
+  "http://localhost:8001",
+];
+if (process.env.FRONTEND_URL) {
+  devOrigins.push(process.env.FRONTEND_URL);
+}
+
 app.use(
   cors({
     origin:
       process.env.NODE_ENV === "production"
-        ? ["https://votre-domaine.com"]
-        : ["http://localhost:8000", "http://localhost:8001"],
+        ? process.env.FRONTEND_URL
+          ? [process.env.FRONTEND_URL]
+          : ["https://votre-domaine.com"]
+        : devOrigins,
     credentials: true,
   })
 );
