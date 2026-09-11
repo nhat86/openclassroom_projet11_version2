@@ -19,8 +19,8 @@ function LoginForm() {
     setIsSubmitting(true);
 
     try {
-      await login(email, password);
-      router.push("/dashboard/${user.id}");
+      const user = await login(email, password);
+      router.push(`/dashboard/${user.id}`);
     } catch (submitError) {
       setError(
         submitError instanceof Error
