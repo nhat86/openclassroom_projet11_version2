@@ -36,7 +36,6 @@ export async function login(
 export async function register(
   email: string,
   password: string,
-  name: string
 ): Promise<User> {
   const response = await fetch(`${API_URL}/auth/register`, {
     method: "POST",

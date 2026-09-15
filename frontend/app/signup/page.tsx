@@ -10,7 +10,6 @@ export default function SignupPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -32,7 +31,7 @@ export default function SignupPage() {
     setIsSubmitting(true);
 
     try {
-      await register(email, password, name);
+      await register(email, password);
       router.push("/login?registered=1");
     } catch (submitError) {
       setError(
@@ -56,19 +55,6 @@ export default function SignupPage() {
           </h1>
 
           <form onSubmit={submit} className="space-y-5">
-            <div>
-              <label htmlFor="signup-name" className="block text-sm mb-1.5">
-                Nom
-              </label>
-              <input
-                id="signup-name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full border border-black/10 rounded-lg px-4 py-3 text-sm bg-white outline-none focus:border-dark-orange"
-                required
-              />
-            </div>
             <div>
               <label htmlFor="signup-email" className="block text-sm mb-1.5">
                 Email
