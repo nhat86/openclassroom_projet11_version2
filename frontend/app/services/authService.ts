@@ -43,7 +43,7 @@ export async function register(
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password, name }),
+    body: JSON.stringify({ email, password }),
   });
 
   const result = await response.json();
@@ -52,6 +52,29 @@ export async function register(
     throw new Error(
       result.message ?? "Impossible de créer le compte"
     );
+  }
+
+  return result.data.user;
+}
+
+// Mise à jour du profil
+export async function updateProfile(data: {
+  name?: string;
+  email?: string;
+}): Promise<User> {
+  const response = await fetch(`${API_URL}/auth/profile`, {
+    method: "PUT",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.message ?? "Impossible de mettre à jour le profil");
   }
 
   return result.data.user;
