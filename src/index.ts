@@ -7,9 +7,8 @@ import dotenv from "dotenv";
 
 // Routes
 import authRoutes from "./routes/authRoutes";
-import projectRoutes from "./routes/projectRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
-import { searchUsers } from "./controllers/projectController";
+import projectRoutes from "./routes/projectRoutes";
 
 // Middleware
 import { authenticateToken } from "./middleware/auth";
@@ -81,11 +80,8 @@ app.use(
 
 // Routes
 app.use("/auth", authRoutes);
-app.use("/projects", projectRoutes);
 app.use("/dashboard", dashboardRoutes);
-
-// Route pour la recherche d'utilisateurs
-app.get("/users/search", authenticateToken, searchUsers);
+app.use("/projects", projectRoutes);
 
 // Route de santé
 app.get("/health", (req, res) => {

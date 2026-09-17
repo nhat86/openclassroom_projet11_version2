@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { Search } from "lucide-react";
 import { getProfile, type User } from "../../services/authService";
 import { Navbar } from "../../components/Navbar";
 import { getUserTasks, type Task } from "../../services/taskService";
 import { TaskList } from "../../components/TaskList";
 import { Kanban } from "../../components/Kanban";
+import { CreateProjectModal } from "../../components/modals/CreateProjectModal";
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
@@ -15,6 +17,7 @@ export default function DashboardPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loadingTasks, setLoadingTasks] = useState(true);
   const [errorTasks, setErrorTasks] = useState("");
+  const [search, setSearch] = useState("");
   
   useEffect(() => {
     getProfile().then(setUser).catch(() => setUser(null));
@@ -30,6 +33,16 @@ export default function DashboardPage() {
       .finally(() => setLoadingTasks(false));
   }, []);
 
+  const filteredTasks = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    if (!term) return tasks;
+    return tasks.filter(
+      (task) =>
+        task.title.toLowerCase().includes(term) ||
+        (task.project?.name ?? "").toLowerCase().includes(term)
+    );
+  }, [search, tasks]);
+
   if (!user) {
     return (
       <main className="p-8">
@@ -37,7 +50,7 @@ export default function DashboardPage() {
       </main>
     );
   }
- 
+
   return (
     <div className="flex-1 flex flex-col bg-background">
       <Navbar />
@@ -94,8 +107,16 @@ export default function DashboardPage() {
               </div>
               <div className="relative">
                 <input
+                  type="search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                   placeholder="Rechercher une tâche"
                   className="border border-black/10 rounded-lg pl-4 pr-10 py-2.5 text-sm outline-none focus:border-dark-orange w-64"
+                />
+                <Search
+                  size={16}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-black/40 pointer-events-none"
+                  aria-hidden="true"
                 />
               </div>
             </div>
@@ -103,7 +124,7 @@ export default function DashboardPage() {
             <div className="space-y-4">
               {loadingTasks && <p>Chargement des tâches...</p>}
               {errorTasks && <p className="text-red-600">{errorTasks}</p>}
-              {!loadingTasks && <TaskList tasks={tasks} />}
+              {!loadingTasks && <TaskList tasks={filteredTasks} />}
             </div>
           </div>
         ):(
@@ -114,7 +135,13 @@ export default function DashboardPage() {
           </div>
         )}
       </main>
-    
+
+      {showCreateProject && (
+        <CreateProjectModal
+          onClose={() => setShowCreateProject(false)}
+          onProjectCreated={() => getUserTasks().then(setTasks)}
+        />
+      )}
     </div>
   );
 }
