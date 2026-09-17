@@ -1,9 +1,36 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+
 export interface UserContributor {
     id: string;
     name: string | null;
     email: string;
 }
+export interface ProjectMember {
+  id: string;
+  role: string;
+  joinedAt: string;
+  userId: string;
+  projectId: string;
+  user: UserContributor;
+}
+ 
+export interface ProjectTask {
+  id: string;
+  status: string;
+}
+ 
+export interface Project {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  ownerId: string;
+  owner: UserContributor;
+  members: ProjectMember[];
+  tasks: ProjectTask[];
+}
+ 
 export async function getUsers(): Promise<UserContributor[]> {
     const res = await fetch(`${API_URL}/projects/users`, {
         method: "GET",
@@ -37,4 +64,16 @@ export async function createProject(
         throw new Error(data.message || "Erreur lors de la création du projet");
     }
     return data.data.project;
+}
+
+export async function getProjects(): Promise<Project[]> {
+  const res = await fetch(`${API_URL}/projects`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!res.ok) {
+    throw new Error("Erreur lors de la récupération des projets");
+  }
+  const result = await res.json();
+  return result.data.projects;
 }

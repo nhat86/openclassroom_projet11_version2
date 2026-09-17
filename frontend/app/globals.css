@@ -7,6 +7,7 @@
   --color-light-orange: #FFE8D9;
   --color-dark-orange: #D3590B;
   --color-black: #1F1F1F;
+  --color-gris: #0F0F0F;
 
   --color-status-todo-bg: #FFE0E0;
   --color-status-todo-text: #EF4444;
@@ -20,6 +21,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-black: var(--color-black);
+  --color-gris: var(--color-gris);
   --color-dark-orange: var(--color-dark-orange);
   --color-light-orange: var(--color-light-orange);
   --font-sans: var(--font-inter);
