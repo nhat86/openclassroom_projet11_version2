@@ -6,6 +6,7 @@ import { LayoutDashboard, Folder } from "lucide-react";
 import { Logo } from "./Logo";
 import { useState, useRef, useEffect } from "react";
 import { getProfile, logout, type User } from "../services/authService";
+import { getInitials } from "@/lib/utils";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -41,14 +42,7 @@ export function Navbar() {
   const isDashboard = pathname?.startsWith("/dashboard");
   const isProjects = pathname?.startsWith("/projects");
   const userId = user?.id ?? "";
-  const initials =
-    (user?.name ?? "U")
-      .trim()
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((part) => part[0]?.toUpperCase() ?? "")
-      .join("") || "U";
+  const initials = getInitials(user?.name ?? null);
 
   return (
     <header className="bg-white border-b border-black/5 px-6 md:px-10 py-4 flex items-center justify-between gap-4">

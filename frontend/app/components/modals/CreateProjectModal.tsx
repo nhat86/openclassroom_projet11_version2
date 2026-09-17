@@ -6,6 +6,7 @@ import {
   getUsers,
   type UserContributor,
 } from "../../services/projectService";
+import { ContributorSelect } from "../ContributorSelect";
 import { Modal } from "../Modal";
 
 export function CreateProjectModal({
@@ -83,33 +84,17 @@ export function CreateProjectModal({
 
         <div>
           <label className="block text-sm mb-1.5">Contributeurs</label>
-          <select
-            multiple
-            value={selectedContributors}
-            onChange={(e) => {
-              const selectedOptions = Array.from(
-                e.target.selectedOptions,
-                (option) => option.value
-              );
-              setSelectedContributors(selectedOptions);
-            }}
-            className="w-full border border-black/10 rounded-lg px-4 py-3 text-sm outline-none focus:border-dark-orange min-h-[120px]"
-          >
-            {contributors.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.name ?? user.email} ({user.email})
-              </option>
-            ))}
-          </select>
-          <p className="text-xs text-black/40 mt-1">
-            Maintenez Ctrl (Cmd sur Mac) pour sélectionner plusieurs
-          </p>
+          <ContributorSelect
+            users={contributors}
+            selectedIds={selectedContributors}
+            onChange={setSelectedContributors}
+          />
         </div>
 
         <button
           type="submit"
           disabled={!canSubmit || loading}
-          className={`w-full py-3 rounded-lg font-medium transition-colors ${
+          className={`block text-center pt-[13px] pr-[74px] pb-[13px] pl-[74px] rounded-lg font-medium transition-colors ${
             canSubmit && !loading
               ? "bg-black text-white hover:bg-black/80"
               : "bg-black/10 text-black/40 cursor-not-allowed"
