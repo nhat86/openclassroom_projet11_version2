@@ -80,6 +80,23 @@ export async function updateProfile(data: {
   return result.data.user;
 }
 
+export async function updatePassword(newPassword: string): Promise<void> {
+  const response = await fetch(`${API_URL}/auth/password`, {
+    method: "PUT",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ newPassword }),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.message ?? "Impossible de mettre à jour le mot de passe");
+  }
+}
+
 // Déconnexion
 export async function logout(): Promise<void> {
   const response = await fetch(`${API_URL}/auth/logout`, {

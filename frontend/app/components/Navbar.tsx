@@ -4,30 +4,32 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LayoutDashboard, Folder } from "lucide-react";
 import { Logo } from "./Logo";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { getProfile, logout, type User } from "../services/authService";
 import { getInitials } from "@/lib/utils";
+import { EditAccountModal } from "./modals/UpdateProfileModal";
 
 export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showEditAccount, setShowEditAccount] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    async function loadUser() {
-      try {
-        const profile = await getProfile();
-        setUser(profile);
-      } catch (error) {
-        console.error("Erreur de récupération du profil :", error);
-        router.push("/login");
-      }
+  const loadUser = useCallback(async () => {
+    try {
+      const profile = await getProfile();
+      setUser(profile);
+    } catch (error) {
+      console.error("Erreur de récupération du profil :", error);
+      router.push("/login");
     }
-
-    loadUser();
   }, [router]);
+
+  useEffect(() => {
+    loadUser();
+  }, [loadUser]);
 
   useEffect(() => {
     function onClick(e: MouseEvent) {
@@ -101,7 +103,7 @@ export function Navbar() {
             <button
               onClick={() => {
                 setMenuOpen(false);
-                router.push("/account");
+                setShowEditAccount(true);
               }}
               className="w-full text-left px-4 py-2.5 hover:bg-black/5"
             >
@@ -124,6 +126,14 @@ export function Navbar() {
           </div>
         )}
       </div>
+
+      {showEditAccount && (
+        <EditAccountModal
+          open={showEditAccount}
+          onClose={() => setShowEditAccount(false)}
+          onUpdated={loadUser}
+        />
+      )}
     </header>
   );
 }

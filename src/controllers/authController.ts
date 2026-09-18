@@ -400,7 +400,7 @@ export const updatePassword = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { currentPassword, newPassword }: UpdatePasswordRequest = req.body;
+    const { newPassword }: UpdatePasswordRequest = req.body;
     const authReq = req as AuthRequest;
 
     if (!authReq.user) {
@@ -410,7 +410,6 @@ export const updatePassword = async (
 
     // Validation des données
     const validationErrors = validateUpdatePasswordData({
-      currentPassword,
       newPassword,
     });
     if (validationErrors.length > 0) {
@@ -418,31 +417,6 @@ export const updatePassword = async (
         res,
         "Données de mise à jour du mot de passe invalides",
         validationErrors
-      );
-      return;
-    }
-
-    // Récupérer l'utilisateur avec son mot de passe actuel
-    const user = await prisma.user.findUnique({
-      where: { id: authReq.user.id },
-    });
-
-    if (!user) {
-      sendError(res, "Utilisateur non trouvé", "USER_NOT_FOUND", 404);
-      return;
-    }
-
-    // Vérifier le mot de passe actuel
-    const isCurrentPasswordValid = await bcrypt.compare(
-      currentPassword,
-      user.password
-    );
-    if (!isCurrentPasswordValid) {
-      sendError(
-        res,
-        "Mot de passe actuel incorrect",
-        "INVALID_CURRENT_PASSWORD",
-        401
       );
       return;
     }

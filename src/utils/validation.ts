@@ -118,16 +118,6 @@ export const validateUpdateProfileData = (data: {
     }
   }
 
-  // Validation du nom si fourni
-  if (data.name !== undefined) {
-    if (data.name.trim().length < 2) {
-      errors.push({
-        field: "name",
-        message: "Le nom doit contenir au moins 2 caractères",
-      });
-    }
-  }
-
   return errors;
 };
 
@@ -137,18 +127,9 @@ export const validateUpdateProfileData = (data: {
  * @returns Un tableau d'erreurs de validation
  */
 export const validateUpdatePasswordData = (data: {
-  currentPassword: string;
   newPassword: string;
 }): ValidationError[] => {
   const errors: ValidationError[] = [];
-
-  // Validation du mot de passe actuel
-  if (!data.currentPassword) {
-    errors.push({
-      field: "currentPassword",
-      message: "Le mot de passe actuel est requis",
-    });
-  }
 
   // Validation du nouveau mot de passe
   if (!data.newPassword) {
@@ -161,18 +142,6 @@ export const validateUpdatePasswordData = (data: {
       field: "newPassword",
       message:
         "Le nouveau mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule et un chiffre",
-    });
-  }
-
-  // Vérifier que le nouveau mot de passe est différent de l'actuel
-  if (
-    data.currentPassword &&
-    data.newPassword &&
-    data.currentPassword === data.newPassword
-  ) {
-    errors.push({
-      field: "newPassword",
-      message: "Le nouveau mot de passe doit être différent de l'actuel",
     });
   }
 
