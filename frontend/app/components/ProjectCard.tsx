@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { getInitials } from "@/lib/utils";
+import Link from "next/link";
+import { getInitials } from "@/lib/getInitialName";
 import type { Project } from "../services/projectService";
 
 export function ProjectCard({ project }: { project: Project }) {
@@ -11,7 +12,12 @@ export function ProjectCard({ project }: { project: Project }) {
 
   return (
     <div className="bg-white border border-black/5 rounded-2xl p-6">
-      <h3 className="font-semibold text-lg mb-2">{project.name}</h3>
+      <Link
+        href={`/projects/${project.id}`}
+        className="block font-semibold text-lg mb-2 hover:underline"
+      >
+        {project.name}
+      </Link>
       <p className="text-sm text-black/50 mb-6 line-clamp-2">
         {project.description}
       </p>

@@ -30,7 +30,52 @@ export interface Project {
   members: ProjectMember[];
   tasks: ProjectTask[];
 }
+
+export interface ProjectDetailMember{
+    id: string;
+    role: string;
+    joinedAt: string;
+    userId: string;
+    projectId: string;
+    user: UserContributor;
+}
  
+export interface ProjectDetailTaskAssignee {
+  user: UserContributor;
+}
+ 
+export interface ProjectDetailTaskComment {
+  id: string;
+  content: string;
+  createdAt: string;
+  author: { id: string; name: string | null };
+}
+ 
+export interface ProjectDetailTask {
+  id: string;
+  title: string;
+  description: string | null;
+  status: string;
+  priority: string;
+  dueDate: string | null;
+  createdAt: string;
+  project: { id: string; name: string };
+  assignees: ProjectDetailTaskAssignee[];
+  comments: ProjectDetailTaskComment[];
+}
+ 
+export interface ProjectDetail {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  ownerId: string;
+  owner: UserContributor;
+  members: ProjectDetailMember[];
+  tasks: ProjectDetailTask[];
+}
+
 export async function getUsers(): Promise<UserContributor[]> {
     const res = await fetch(`${API_URL}/projects/users`, {
         method: "GET",
@@ -76,4 +121,16 @@ export async function getProjects(): Promise<Project[]> {
   }
   const result = await res.json();
   return result.data.projects;
+}
+
+export async function getProjectById(projectId: string): Promise<ProjectDetail> {
+  const res = await fetch(`${API_URL}/projects/${projectId}`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!res.ok) {
+    throw new Error("Erreur lors de la récupération du projet");
+  }
+  const result = await res.json();
+  return result.data.project;
 }

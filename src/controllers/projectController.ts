@@ -100,3 +100,63 @@ export const getProject= async (req: Request, res: Response): Promise<void> => {
     sendServerError(res, "Erreur lors de la récupération des projets");
   }
 };
+
+export const getProjectById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const authReq = req as AuthRequest;
+    if (!authReq.user) {
+      sendError(res, "Utilisateur non authentifié", "UNAUTHORIZED", 401);
+      return;
+    }
+
+    const project = await prisma.project.findUnique({
+      where: { id: req.params.id },
+      include: {
+        owner: { select: { id: true, name: true, email: true } },
+        members: {
+          include: {
+            user: { select: { id: true, name: true, email: true } },
+          },
+        },
+        tasks: {
+          include: {
+            project: { select: { id: true, name: true } },
+            assignees: {
+              include: {
+                user: { select: { id: true, name: true, email: true } },
+              },
+            },
+            comments: {
+              include: {
+                author: { select: { id: true, name: true, email: true } },
+              },
+              orderBy: { createdAt: "asc" },
+            },
+          },
+          orderBy: { createdAt: "desc" },
+        },
+      },
+    });
+
+    if (!project) {
+      sendError(res, "Projet non trouvé", "NOT_FOUND", 404);
+      return;
+    }
+
+    const isMember = project.members.some(
+      (member) => member.userId === authReq.user!.id
+    );
+    if (project.ownerId !== authReq.user.id && !isMember) {
+      sendError(res, "Accès refusé", "FORBIDDEN", 403);
+      return;
+    }
+
+    sendSuccess(res, "Projet récupéré avec succès", { project });
+  } catch (error) {
+    console.error("Erreur lors de la récupération du projet:", error);
+    sendServerError(res, "Erreur lors de la récupération du projet");
+  }
+};
