@@ -1,7 +1,7 @@
 "use client";
 
 import { Task } from "../services/taskService";
-import { getStatusInfo, getTaskStatus, statusOrder } from "../../lib/utils";
+import { getStatusInfo, getTaskStatus, statusOrder } from "../../lib/taskStatus";
 import { TaskCard } from "./TaskCard";
 
 export function Kanban({ tasks }: { tasks: Task[] }) {

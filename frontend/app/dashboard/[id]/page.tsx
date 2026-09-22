@@ -9,6 +9,7 @@ import { getUserTasks, type Task } from "../../services/taskService";
 import { TaskList } from "../../components/TaskList";
 import { Kanban } from "../../components/Kanban";
 import { CreateProjectModal } from "../../components/modals/CreateProjectModal";
+import { filteredTasks as filterTasks } from "../../../lib/searchTask";
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
@@ -18,7 +19,9 @@ export default function DashboardPage() {
   const [loadingTasks, setLoadingTasks] = useState(true);
   const [errorTasks, setErrorTasks] = useState("");
   const [search, setSearch] = useState("");
-  
+
+  const filteredTaskList = useMemo(() => filterTasks(tasks, search), [tasks, search]);
+
   useEffect(() => {
     getProfile().then(setUser).catch(() => setUser(null));
   }, []);
@@ -33,15 +36,6 @@ export default function DashboardPage() {
       .finally(() => setLoadingTasks(false));
   }, []);
 
-  const filteredTasks = useMemo(() => {
-    const term = search.trim().toLowerCase();
-    if (!term) return tasks;
-    return tasks.filter(
-      (task) =>
-        task.title.toLowerCase().includes(term) ||
-        (task.project?.name ?? "").toLowerCase().includes(term)
-    );
-  }, [search, tasks]);
 
   if (!user) {
     return (
@@ -124,7 +118,7 @@ export default function DashboardPage() {
             <div className="space-y-4">
               {loadingTasks && <p>Chargement des tâches...</p>}
               {errorTasks && <p className="text-red-600">{errorTasks}</p>}
-              {!loadingTasks && <TaskList tasks={filteredTasks} />}
+              {!loadingTasks && <TaskList tasks={filteredTaskList} />}
             </div>
           </div>
         ):(

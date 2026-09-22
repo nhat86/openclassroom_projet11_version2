@@ -6,7 +6,7 @@ import { LayoutDashboard, Folder } from "lucide-react";
 import { Logo } from "./Logo";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { getProfile, logout, type User } from "../services/authService";
-import { getInitials } from "@/lib/utils";
+import { getInitials } from "@/lib/getInitialName";
 import { EditAccountModal } from "./modals/UpdateProfileModal";
 
 export function Navbar() {

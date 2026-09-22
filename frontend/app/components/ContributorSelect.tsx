@@ -2,7 +2,7 @@
 
 import { ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { getInitials } from "@/lib/utils";
+import { getInitials } from "@/lib/getInitialName";
 import type { UserContributor } from "../services/projectService";
 
 export function ContributorSelect({

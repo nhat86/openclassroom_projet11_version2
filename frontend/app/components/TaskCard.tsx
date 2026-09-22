@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Task } from "../services/taskService";
-import { getStatusInfo } from "../../lib/utils";
+import { getStatusInfo } from "../../lib/taskStatus";
 
 function formatDate(iso: string | null | undefined) {
   if (!iso) return "—";

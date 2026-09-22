@@ -1,14 +1,3 @@
-export function getInitials(name: string | null): string {
-  const source = name?.trim() ?? "U";
-  return (
-    source
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((part) => part[0]?.toUpperCase() ?? "")
-      .join("") || "U"
-  );
-}
 export type TaskStatus = "A_FAIRE" | "EN_COURS" | "TERMINEE";
 
 export const BACKEND_STATUS_MAP: Record<string, TaskStatus> = {
@@ -45,3 +34,9 @@ export function getStatusInfo(backendStatus: string) {
     className: statusStyles[normalized as TaskStatus] ?? "bg-black/5 text-black/60",
   };
 }
+
+export const PRIORITY_ORDER: Record<string, number> = {
+  HIGH: 1,
+  MEDIUM: 2,
+  LOW: 3,
+};
