@@ -3,26 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Task } from "../services/taskService";
-import { STATUS_LABEL, type TaskStatus } from "@/lib/types";
-
-const statusStyles: Record<TaskStatus, string> = {
-  A_FAIRE:
-    "bg-[var(--color-status-todo-bg)] text-[var(--color-status-todo-text)]",
-  EN_COURS:
-    "bg-[var(--color-status-progress-bg)] text-[var(--color-status-progress-text)]",
-  TERMINEE:
-    "bg-[var(--color-status-done-bg)] text-[var(--color-status-done-text)]",
-};
-
-const BACKEND_STATUS_MAP: Record<string, TaskStatus> = {
-  TODO: "A_FAIRE",
-  IN_PROGRESS: "EN_COURS",
-  DONE: "TERMINEE",
-};
-
-export function getTaskStatus(backendStatus: string): TaskStatus {
-  return BACKEND_STATUS_MAP[backendStatus] ?? "A_FAIRE";
-}
+import { getStatusInfo } from "../../lib/utils";
 
 function formatDate(iso: string | null | undefined) {
   if (!iso) return "—";
@@ -43,7 +24,7 @@ export function TaskCard({
   task: Task;
   layout?: TaskCardLayout;
 }) {
-  const status = getTaskStatus(task.status);
+  const { label, className } = getStatusInfo(task.status);
 
   if (layout === "kanban") {
     return (
@@ -53,10 +34,10 @@ export function TaskCard({
             <h4 className="font-medium">{task.title}</h4>
             <span
               className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
-                statusStyles[status] ?? "bg-black/5 text-black/60"
+                className
               }`}
             >
-              {STATUS_LABEL[status] ?? task.status}
+              {label}
             </span>
           </div>
           <p className="text-sm text-black/50 mb-3">
@@ -145,10 +126,10 @@ export function TaskCard({
       <div className="flex flex-col items-center gap-3 shrink-0">
         <div
           className={`inline-flex self-end items-center px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
-            statusStyles[status] ?? "bg-black/5 text-black/60"
+            className ?? "bg-black/5 text-black/60"
           }`}
         >
-          {STATUS_LABEL[status] ?? task.status}
+          {label}
         </div>
         <Link
           href="#"

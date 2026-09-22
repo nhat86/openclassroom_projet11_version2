@@ -1,13 +1,14 @@
 "use client";
 
 import { Task } from "../services/taskService";
-import { STATUS_LABEL, STATUS_ORDER, type TaskStatus } from "@/lib/types";
-import { TaskCard, getTaskStatus } from "./TaskCard";
+import { getStatusInfo, getTaskStatus, statusOrder } from "../../lib/utils";
+import { TaskCard } from "./TaskCard";
 
 export function Kanban({ tasks }: { tasks: Task[] }) {
-  const columns = STATUS_ORDER.map((status) => ({
+  const columns = statusOrder.map((status) => ({
     status,
-    label: STATUS_LABEL[status],
+    label: getStatusInfo(status).label,
+    className: getStatusInfo(status).className,
     tasks: tasks.filter((t) => getTaskStatus(t.status) === status),
   }));
 
@@ -20,7 +21,9 @@ export function Kanban({ tasks }: { tasks: Task[] }) {
         >
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold">{col.label}</h3>
-            <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-black/5 text-black/60">
+            <span
+              className={`text-xs font-medium px-2.5 py-1 rounded-full ${col.className}`}
+            >
               {col.tasks.length}
             </span>
           </div>

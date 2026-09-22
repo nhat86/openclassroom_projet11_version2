@@ -54,10 +54,4 @@ export type User = {
   initials: string;
 };
 
-export const STATUS_LABEL: Record<TaskStatus, string> = {
-  A_FAIRE: "À faire",
-  EN_COURS: "En cours",
-  TERMINEE: "Terminée",
-};
 
-export const STATUS_ORDER: TaskStatus[] = ["A_FAIRE", "EN_COURS", "TERMINEE"];
