@@ -36,3 +36,25 @@ export async function getUserTasks(): Promise<Task[]> {
 
   return result.data.tasks;
 }
+
+export async function createTask(
+  projectId: string,
+  data: {
+    title: string;
+    description?: string;
+    status?: string;
+    priority?: string;
+    dueDate?: string;
+    assigneeIds?: string[];
+  }
+): Promise<Task> {
+  const res = await fetch(`${API_URL}/projects/${projectId}/tasks`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message ?? "Erreur");
+  return result.data.task;
+}

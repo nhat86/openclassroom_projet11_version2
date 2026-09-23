@@ -10,6 +10,7 @@ import authRoutes from "./routes/authRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
 import projectRoutes from "./routes/projectRoutes";
 import commentRoutes from "./routes/commentRoutes";
+import taskRoutes from "./routes/taskRoutes";
 
 // Middleware
 import { authenticateToken } from "./middleware/auth";
@@ -84,6 +85,7 @@ app.use("/auth", authRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/projects", projectRoutes);
 app.use("/", commentRoutes);
+app.use("/",taskRoutes);
 // Route de santé
 app.get("/health", (req, res) => {
   res.status(200).json({

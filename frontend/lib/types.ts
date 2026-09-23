@@ -1,5 +1,3 @@
-export type TaskStatus = "A_FAIRE" | "EN_COURS" | "TERMINEE";
-
 export type ProjectRole = "ADMIN" | "CONTRIBUTEUR";
 
 export const ROLE_LABEL: Record<ProjectRole, string> = {

@@ -11,7 +11,8 @@ import { BACKEND_STATUS_MAP, PRIORITY_ORDER } from "../../../lib/taskStatus";
 import { Search, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import  {getProfile, type User} from "../../services/authService";
-import { UpdateProjectModal } from "@/app/components/modals/UpdateProjectModal";
+import { UpdateProjectModal } from "../../components/modals/UpdateProjectModal";
+import {CreateTaskModal} from "../../components/modals/CreateTaskModal";
 
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -24,6 +25,7 @@ export default function ProjectDetailPage() {
   const [statusFilter, setStatusFilter] = useState("TOUS");
   const [user, setUser] = useState<User | null> (null)
   const [showEditProject, setShowEditProject] = useState(false);
+  const [showCreateTask, setShowCreateTask] = useState(false);
   const displayedTasks = useMemo(() => {
     if (!project) return [];
 
@@ -121,7 +123,10 @@ export default function ProjectDetailPage() {
               <p className="text-black/60 mt-1 max-w-2xl">{project.description}</p>
             </div>
             <div className="flex items-center gap-3">
-              <button className="bg-black text-white text-sm px-4 py-2.5 rounded-lg">
+              <button
+                onClick={() => setShowCreateTask(true)}
+                className="bg-black text-white text-sm px-4 py-2.5 rounded-lg"
+              >
                 Créer une tâche
               </button>
               <button className="bg-dark-orange text-white text-sm px-4 py-2.5 rounded-lg">
@@ -242,6 +247,15 @@ export default function ProjectDetailPage() {
             project={project}
             onClose={() => setShowEditProject(false)}
             onUpdated={() => id && getProjectById(id).then(setProject)}
+          />
+        )}
+
+        {/* Modale create task */}
+        {showCreateTask && (
+          <CreateTaskModal
+            project={project}
+            onClose={() => setShowCreateTask(false)}
+            onCreated={() => id && getProjectById(id).then(setProject)}
           />
         )}
       </main>

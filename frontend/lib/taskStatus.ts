@@ -34,7 +34,11 @@ export function getStatusInfo(backendStatus: string) {
     className: statusStyles[normalized as TaskStatus] ?? "bg-black/5 text-black/60",
   };
 }
-
+export const FRONTEND_TO_BACKEND: Record<TaskStatus, string> = {
+  A_FAIRE: "TODO",
+  EN_COURS: "IN_PROGRESS",
+  TERMINEE: "DONE",
+};
 export const PRIORITY_ORDER: Record<string, number> = {
   HIGH: 1,
   MEDIUM: 2,
