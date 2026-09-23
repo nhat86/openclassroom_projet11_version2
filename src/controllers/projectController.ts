@@ -160,3 +160,70 @@ export const getProjectById = async (
     sendServerError(res, "Erreur lors de la récupération du projet");
   }
 };
+
+export const updateProject = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const authReq = req as AuthRequest;
+    if (!authReq.user) {
+      sendError(res, "Non authentifié", "UNAUTHORIZED", 401);
+      return;
+    }
+
+    const { id } = req.params;
+    const { name, description, contributorIds } = req.body;
+
+    const project = await prisma.project.findUnique({
+      where: { id },
+      include: { members: true },
+    });
+
+    if (!project) {
+      sendError(res, "Projet non trouvé", "NOT_FOUND", 404);
+      return;
+    }
+
+    if (project.ownerId !== authReq.user.id) {
+      sendError(res, "Non autorisé", "FORBIDDEN", 403);
+      return;
+    }
+
+    if (!name || name.trim().length < 2) {
+      sendError(res, "Nom requis", "BAD_REQUEST", 400);
+      return;
+    }
+
+    const members = Array.isArray(contributorIds)
+      ? contributorIds
+          .filter((userId: string) => userId !== authReq.user!.id)
+          .map((userId: string) => ({ userId, role: "CONTRIBUTOR" }))
+      : [];
+
+    await prisma.projectMember.deleteMany({
+      where: { projectId: id },
+    });
+
+    await prisma.project.update({
+      where: { id },
+      data: {
+        name: name.trim(),
+        description: description?.trim() ?? "",
+        members: {
+          create: members,
+        },
+      },
+      include: {
+        owner: { select: { id: true, name: true, email: true } },
+        members: {
+          include: {
+            user: { select: { id: true, name: true, email: true } },
+          },
+        },
+      },
+    });
+
+    sendSuccess(res, "Projet mis à jour avec succès", { project });
+  } catch (error) {
+    console.error(error);
+    sendServerError(res, "Erreur lors de la mise à jour du projet");
+  }
+};

@@ -11,6 +11,7 @@ import { BACKEND_STATUS_MAP, PRIORITY_ORDER } from "../../../lib/taskStatus";
 import { Search, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import  {getProfile, type User} from "../../services/authService";
+import { UpdateProjectModal } from "@/app/components/modals/UpdateProjectModal";
 
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +23,7 @@ export default function ProjectDetailPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("TOUS");
   const [user, setUser] = useState<User | null> (null)
+  const [showEditProject, setShowEditProject] = useState(false);
   const displayedTasks = useMemo(() => {
     if (!project) return [];
 
@@ -95,7 +97,12 @@ export default function ProjectDetailPage() {
                     <ArrowLeft size={18} />
                 </button>
                 <h1 className="text-2xl font-semibold">{project.name}</h1>
-                <button className="text-xs text-dark-orange underline">Modifier</button>
+                <button
+                  onClick={() => setShowEditProject(true)}
+                  className="text-xs text-dark-orange underline"
+                >
+                  Modifier
+                </button>
               </div>
               <p className="text-black/60 mt-1 max-w-2xl">{project.description}</p>
             </div>
@@ -214,6 +221,15 @@ export default function ProjectDetailPage() {
             ))}
           </div>
         </div>
+
+        {/* Modale modifier project */}
+        {showEditProject && (
+          <UpdateProjectModal
+            project={project}
+            onClose={() => setShowEditProject(false)}
+            onUpdated={() => id && getProjectById(id).then(setProject)}
+          />
+        )}
       </main>
     </div>
   );

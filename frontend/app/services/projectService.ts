@@ -134,3 +134,22 @@ export async function getProjectById(projectId: string): Promise<ProjectDetail> 
   const result = await res.json();
   return result.data.project;
 }
+
+export async function updateProject(
+  projectId: string,
+  data: {
+    name: string;
+    description: string;
+    contributorIds: string[];
+  }
+): Promise<Project> {
+  const res = await fetch(`${API_URL}/projects/${projectId}`, {
+    method: "PUT",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message ?? "Erreur");
+  return result.data.project;
+}
