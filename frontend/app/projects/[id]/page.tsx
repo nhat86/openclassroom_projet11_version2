@@ -50,6 +50,8 @@ export default function ProjectDetailPage() {
     return filterTask(statusFiltered, search);
   }, [project, view, statusFilter, search]);
 
+    
+
   useEffect(() => {
     if (!id) return;
     getProjectById(id)
@@ -66,9 +68,16 @@ export default function ProjectDetailPage() {
     .catch(()=> setUser(null));
   }, []);
 
+
   if (loading) return <p>Chargement...</p>;
   if (error) return <p className="text-red-600">{error}</p>;
   if (!project) return <p>Projet introuvable.</p>;
+
+  const isAdmin =
+      project.ownerId === user?.id ||
+      project.members.some(
+        (m) => m.userId === user?.id && m.role === "ADMIN"
+      );
 
   return (
     <div className="min-h-screen bg-background">
@@ -200,6 +209,7 @@ export default function ProjectDetailPage() {
                     key={task.id} 
                     task={task} 
                     currentUser={user}
+                    isAdmin={isAdmin}
                     onCommentUpdated={()=> id && getProjectById(id).then(setProject)}/>
             ))}
           </div>

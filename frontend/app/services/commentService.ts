@@ -22,3 +22,30 @@ export async function createComment(taskId: string, projectId: string, content: 
     }
     return result.data.comment;
 }
+
+export async function updateComment(taskId: string, projectId: string, commentId: string, content: string): Promise<Comment> {
+    const response = await fetch(`${API_URL}/projects/${projectId}/tasks/${taskId}/comments/${commentId}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content }),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+        throw new Error(result.message ?? "Failed to update comment");
+    }
+    return result.data.comment;
+}
+
+export async function deleteComment(taskId: string, projectId: string, commentId: string): Promise<Comment | void> {
+    const response = await fetch(`${API_URL}/projects/${projectId}/tasks/${taskId}/comments/${commentId}`, {
+        method: "DELETE",
+        credentials: "include",
+    });
+    const result = await response.json();
+    if (!response.ok) {
+        throw new Error(result.message ?? "Failed to delete comment");
+    }
+}

@@ -7,7 +7,7 @@ import { getStatusInfo } from "@/lib/taskStatus";
 import { getInitials } from "@/lib/getInitialName";
 import type { ProjectDetailTask } from "../services/projectService";
 import type {User} from "../services/authService";
-import { createComment } from "../services/commentService";
+import { createComment, updateComment, deleteComment } from "../services/commentService";
 
 function formatDate(date: string | null) {
   if (!date) return "—";
@@ -20,15 +20,19 @@ function formatDate(date: string | null) {
 export function ProjectTaskItem({ 
     task,
     currentUser,
+    isAdmin,
     onCommentUpdated,
 }: { 
     task: ProjectDetailTask;
     currentUser: User | null;
+    isAdmin: boolean;
     onCommentUpdated: ()=>void;
 }) {
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
   const { label, className } = getStatusInfo(task.status);
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editContent, setEditContent] = useState("");
   async function handleAddComment() {
     if (!newComment.trim()) return;
     await createComment(task.id, task.project.id, newComment.trim());
@@ -37,7 +41,19 @@ export function ProjectTaskItem({
     onCommentUpdated();
   }
   const canAddComment = currentUser !== null;
-  
+
+  async function handleUpdateComment(commentId: string) {
+    if (!editContent.trim()) return;
+    await updateComment(task.id, task.project.id, commentId, editContent.trim());
+    setEditingCommentId(null);
+    onCommentUpdated();
+  }
+
+  async function handleDeleteComment(commentId: string) {
+    if (!confirm("Supprimer ce commentaire ?")) return;
+    await deleteComment(task.id, task.project.id,  commentId);
+    onCommentUpdated();
+  }
   return (
     <div className="border border-black/5 rounded-xl p-5">
       <div className="flex items-start justify-between gap-4">
@@ -90,12 +106,66 @@ export function ProjectTaskItem({
             {task.comments.length === 0 && (
                 <p className="text-sm text-black/40">Aucun commentaire</p>
             )}
-            {task.comments.map((c) => (
+            {task.comments.map((c) => {
+              const canEdit = c.author.id === currentUser?.id;
+              const canDelete = canEdit || isAdmin;
+
+              return (
                 <div key={c.id} className="text-sm">
-                <p className="font-medium">{c.author.name ?? "Utilisateur"}</p>
-                <p className="text-black/60">{c.content}</p>
+                  <p className="font-medium">{c.author.name ?? "Utilisateur"}</p>
+
+                  {editingCommentId === c.id ? (
+                    <div className="space-y-2">
+                      <input
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                        className="w-full border border-black/10 rounded px-2 py-1"
+                      />
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleUpdateComment(c.id)}
+                          className="text-xs text-dark-orange underline"
+                        >
+                          Enregistrer
+                        </button>
+                        <button
+                          onClick={() => setEditingCommentId(null)}
+                          className="text-xs text-black/60 underline"
+                        >
+                          Annuler
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-black/60">{c.content}</p>
+                  )}
+
+                  {(canEdit || canDelete) && editingCommentId !== c.id && (
+                    <div className="flex gap-2 mt-1">
+                      {canEdit && (
+                        <button
+                          onClick={() => {
+                            setEditingCommentId(c.id);
+                            setEditContent(c.content);
+                          }}
+                          className="text-xs text-dark-orange underline"
+                        >
+                          Modifier
+                        </button>
+                      )}
+                      {canDelete && (
+                        <button
+                          onClick={() => handleDeleteComment(c.id)}
+                          className="text-xs text-red-500 underline"
+                        >
+                          Supprimer
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
-            ))}
+              );
+            })}
             {canAddComment && (
                 <div className="mt-4 flex gap-2">
                     <input
