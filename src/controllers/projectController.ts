@@ -172,17 +172,16 @@ export const updateProject = async (req: Request, res: Response): Promise<void> 
     const { id } = req.params;
     const { name, description, contributorIds } = req.body;
 
-    const project = await prisma.project.findUnique({
+    const existingProject = await prisma.project.findUnique({
       where: { id },
-      include: { members: true },
     });
 
-    if (!project) {
+    if (!existingProject) {
       sendError(res, "Projet non trouvé", "NOT_FOUND", 404);
       return;
     }
 
-    if (project.ownerId !== authReq.user.id) {
+    if (existingProject.ownerId !== authReq.user.id) {
       sendError(res, "Non autorisé", "FORBIDDEN", 403);
       return;
     }
@@ -202,7 +201,7 @@ export const updateProject = async (req: Request, res: Response): Promise<void> 
       where: { projectId: id },
     });
 
-    await prisma.project.update({
+    const updatedProject = await prisma.project.update({
       where: { id },
       data: {
         name: name.trim(),
@@ -221,7 +220,7 @@ export const updateProject = async (req: Request, res: Response): Promise<void> 
       },
     });
 
-    sendSuccess(res, "Projet mis à jour avec succès", { project });
+    sendSuccess(res, "Projet mis à jour avec succès", { updatedProject });
   } catch (error) {
     console.error(error);
     sendServerError(res, "Erreur lors de la mise à jour du projet");
