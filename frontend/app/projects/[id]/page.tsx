@@ -10,7 +10,7 @@ import { filteredTasks as filterTask } from "../../../lib/searchTask";
 import { BACKEND_STATUS_MAP, PRIORITY_ORDER } from "../../../lib/taskStatus";
 import { Search, ArrowLeft } from "lucide-react";
 import Image from "next/image";
-
+import  {getProfile, type User} from "../../services/authService";
 
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +21,7 @@ export default function ProjectDetailPage() {
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("TOUS");
+  const [user, setUser] = useState<User | null> (null)
   const displayedTasks = useMemo(() => {
     if (!project) return [];
 
@@ -58,6 +59,12 @@ export default function ProjectDetailPage() {
       })
       .finally(() => setLoading(false));
   }, [id]);
+
+  useEffect(() => {
+    getProfile()
+    .then(setUser)
+    .catch(()=> setUser(null));
+  }, []);
 
   if (loading) return <p>Chargement...</p>;
   if (error) return <p className="text-red-600">{error}</p>;
@@ -189,7 +196,11 @@ export default function ProjectDetailPage() {
                 <p className="text-sm text-black/40">Aucune tâche trouvée.</p>
             )}
             {displayedTasks.map((task) => (
-                <ProjectTaskItem key={task.id} task={task} />
+                <ProjectTaskItem 
+                    key={task.id} 
+                    task={task} 
+                    currentUser={user}
+                    onCommentUpdated={()=> id && getProjectById(id).then(setProject)}/>
             ))}
           </div>
         </div>

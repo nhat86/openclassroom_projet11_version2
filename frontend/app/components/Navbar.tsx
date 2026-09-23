@@ -28,8 +28,24 @@ export function Navbar() {
   }, [router]);
 
   useEffect(() => {
-    loadUser();
-  }, [loadUser]);
+    let isMounted = true;
+
+    const fetchProfile = async () => {
+      try {
+        const profile = await getProfile();
+        if (isMounted) setUser(profile);
+      } catch (error) {
+        console.error("Erreur de récupération du profil :", error);
+        if (isMounted) router.push("/login");
+      }
+    };
+
+    void fetchProfile();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [router]);
 
   useEffect(() => {
     function onClick(e: MouseEvent) {

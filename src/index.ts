@@ -9,6 +9,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
 import projectRoutes from "./routes/projectRoutes";
+import commentRoutes from "./routes/commentRoutes";
 
 // Middleware
 import { authenticateToken } from "./middleware/auth";
@@ -82,7 +83,7 @@ app.use(
 app.use("/auth", authRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/projects", projectRoutes);
-
+app.use("/", commentRoutes);
 // Route de santé
 app.get("/health", (req, res) => {
   res.status(200).json({
