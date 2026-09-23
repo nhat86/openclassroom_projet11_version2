@@ -153,3 +153,12 @@ export async function updateProject(
   if (!res.ok) throw new Error(result.message ?? "Erreur");
   return result.data.project;
 }
+
+export async function deleteProject(projectId: string): Promise<void> {
+  const res = await fetch(`${API_URL}/projects/${projectId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message ?? "Erreur");
+}

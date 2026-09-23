@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getProjectById, type ProjectDetail } from "../../services/projectService";
+import { getProjectById, deleteProject, type ProjectDetail } from "../../services/projectService";
 import { ProjectTaskItem } from "../../components/ProjectTaskItem";
 import { Navbar } from "../../components/Navbar";
 import { getInitials } from "../../../lib/getInitialName";
@@ -102,6 +102,20 @@ export default function ProjectDetailPage() {
                   className="text-xs text-dark-orange underline"
                 >
                   Modifier
+                </button>
+                <button
+                  onClick={async () => {
+                    if (!confirm("Voulez-vous vraiment supprimer ce projet ?")) return;
+                    try {
+                      await deleteProject(project.id);
+                      router.push("/projects");
+                    } catch (error) {
+                      alert("Erreur lors de la suppression");
+                    }
+                  }}
+                  className="text-xs text-red-500 underline"
+                >
+                  Supprimer
                 </button>
               </div>
               <p className="text-black/60 mt-1 max-w-2xl">{project.description}</p>

@@ -226,3 +226,38 @@ export const updateProject = async (req: Request, res: Response): Promise<void> 
     sendServerError(res, "Erreur lors de la mise à jour du projet");
   }
 };
+
+export const deleteProject = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const authReq = req as AuthRequest;
+    if (!authReq.user) {
+      sendError(res, "Non authentifié", "UNAUTHORIZED", 401);
+      return;
+    }
+ 
+    const { id } = req.params;
+ 
+    const project = await prisma.project.findUnique({
+      where: { id },
+    });
+ 
+    if (!project) {
+      sendError(res, "Projet non trouvé", "NOT_FOUND", 404);
+      return;
+    }
+ 
+    if (project.ownerId !== authReq.user.id) {
+      sendError(res, "Non autorisé", "FORBIDDEN", 403);
+      return;
+    }
+ 
+    await prisma.project.delete({
+      where: { id },
+    });
+ 
+    sendSuccess(res, "Projet supprimé avec succès");
+  } catch (error) {
+    console.error(error);
+    sendServerError(res, "Erreur lors de la suppression du projet");
+  }
+};
