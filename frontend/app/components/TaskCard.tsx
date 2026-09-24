@@ -76,7 +76,7 @@ export function TaskCard({
           </span>
         </div>
         <Link
-          href="#"
+          href={`/projects/${task.project?.id ?? ""}`}
           className="inline-flex w-[121px] h-[50px] items-center justify-center gap-[10px] bg-black text-white text-[16px] font-normal pt-[13px] pr-[74px] pb-[13px] pl-[74px] rounded-[10px] opacity-100 hover:bg-black transition-colors"
         >
           Voir
@@ -132,7 +132,7 @@ export function TaskCard({
           {label}
         </div>
         <Link
-          href="#"
+          href={`/projects/${task.project?.id ?? ""}`}
           className="inline-flex w-[121px] h-[50px] items-center justify-center gap-[10px] bg-black text-white text-[16px] font-normal pt-[13px] pr-[74px] pb-[13px] pl-[74px] rounded-[10px] opacity-100 hover:bg-black transition-colors"
         >
           Voir
