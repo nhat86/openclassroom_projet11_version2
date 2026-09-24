@@ -58,3 +58,38 @@ export async function createTask(
   if (!res.ok) throw new Error(result.message ?? "Erreur");
   return result.data.task;
 }
+
+export async function updateTask(
+  projectId: string,
+  taskId: string,
+  data: {
+    title: string;
+    description?: string;
+    status: string;
+    priority: string;
+    dueDate?: string;
+    assigneeIds: string[];
+  }
+): Promise<Task>{
+  const res = await fetch(`${API_URL}/projects/${projectId}/tasks/${taskId}`, {
+    method: "PUT",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  const result=await res.json();
+  if(!res.ok) throw new Error(result.message ?? "Erreur");
+  return result.data.task;
+}
+
+export async function deleteTask(
+  projectId: string,
+  taskId: string,
+): Promise<void>{
+  const res = await fetch(`${API_URL}/projects/${projectId}/tasks/${taskId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+  const result=await res.json();
+  if(!res.ok) throw new Error(result.message ?? "Erreur");
+}

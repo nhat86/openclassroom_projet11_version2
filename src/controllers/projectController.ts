@@ -124,6 +124,7 @@ export const getProjectById = async (
         tasks: {
           include: {
             project: { select: { id: true, name: true } },
+            creator: { select: { id: true, name: true } },
             assignees: {
               include: {
                 user: { select: { id: true, name: true, email: true } },

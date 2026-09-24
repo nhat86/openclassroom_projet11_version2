@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getProjectById, deleteProject, type ProjectDetail } from "../../services/projectService";
+import { getProjectById, deleteProject, type ProjectDetail, ProjectDetailTask } from "../../services/projectService";
 import { ProjectTaskItem } from "../../components/ProjectTaskItem";
 import { Navbar } from "../../components/Navbar";
 import { getInitials } from "../../../lib/getInitialName";
@@ -13,7 +13,7 @@ import Image from "next/image";
 import  {getProfile, type User} from "../../services/authService";
 import { UpdateProjectModal } from "../../components/modals/UpdateProjectModal";
 import {CreateTaskModal} from "../../components/modals/CreateTaskModal";
-
+import { UpdateTaskModal } from "../../components/modals/UpdateTaskModal";
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [project, setProject] = useState<ProjectDetail | null>(null);
@@ -26,6 +26,7 @@ export default function ProjectDetailPage() {
   const [user, setUser] = useState<User | null> (null)
   const [showEditProject, setShowEditProject] = useState(false);
   const [showCreateTask, setShowCreateTask] = useState(false);
+  const [editingTask, setEditingTask] = useState<ProjectDetailTask | null>(null);
   const displayedTasks = useMemo(() => {
     if (!project) return [];
 
@@ -236,7 +237,9 @@ export default function ProjectDetailPage() {
                     task={task} 
                     currentUser={user}
                     isAdmin={isAdmin}
-                    onCommentUpdated={()=> id && getProjectById(id).then(setProject)}/>
+                    onCommentUpdated={()=> id && getProjectById(id).then(setProject)}
+                    onTaskUpdated={() => id && getProjectById(id).then(setProject)}
+                    onEdit={setEditingTask}/>
             ))}
           </div>
         </div>
@@ -256,6 +259,15 @@ export default function ProjectDetailPage() {
             project={project}
             onClose={() => setShowCreateTask(false)}
             onCreated={() => id && getProjectById(id).then(setProject)}
+          />
+        )}
+        {/* Modale update task */}
+        {editingTask && (
+          <UpdateTaskModal
+            project={project}
+            task={editingTask}
+            onClose={() => setEditingTask(null)}
+            onUpdated={() => id && getProjectById(id).then(setProject)}
           />
         )}
       </main>

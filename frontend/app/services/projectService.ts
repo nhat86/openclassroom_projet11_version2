@@ -60,6 +60,7 @@ export interface ProjectDetailTask {
   dueDate: string | null;
   createdAt: string;
   project: { id: string; name: string };
+  creator: { id: string; name: string | null };
   assignees: ProjectDetailTaskAssignee[];
   comments: ProjectDetailTaskComment[];
 }

@@ -8,6 +8,7 @@ import { getInitials } from "@/lib/getInitialName";
 import type { ProjectDetailTask } from "../services/projectService";
 import type {User} from "../services/authService";
 import { createComment, updateComment, deleteComment } from "../services/commentService";
+import { deleteTask } from "../services/taskService";
 
 function formatDate(date: string | null) {
   if (!date) return "—";
@@ -22,17 +23,23 @@ export function ProjectTaskItem({
     currentUser,
     isAdmin,
     onCommentUpdated,
+    onTaskUpdated,
+    onEdit,
 }: { 
     task: ProjectDetailTask;
     currentUser: User | null;
     isAdmin: boolean;
     onCommentUpdated: ()=>void;
+    onTaskUpdated: ()=>void;
+    onEdit: (task: ProjectDetailTask) => void;
 }) {
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
   const { label, className } = getStatusInfo(task.status);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editContent, setEditContent] = useState("");
+  const canEditEtDeleteTask = currentUser?.id === task.creator.id || isAdmin;
+  const [showMenu, setShowMenu] = useState(false);
   async function handleAddComment() {
     if (!newComment.trim()) return;
     await createComment(task.id, task.project.id, newComment.trim());
@@ -54,6 +61,13 @@ export function ProjectTaskItem({
     await deleteComment(task.id, task.project.id,  commentId);
     onCommentUpdated();
   }
+
+  async function handleDeleteTask() {
+    if (!confirm("Supprimer cette tâche ?")) return;
+    await deleteTask(task.project.id, task.id);
+    onTaskUpdated();
+  }
+
   return (
     <div className="border border-black/5 rounded-xl p-5">
       <div className="flex items-start justify-between gap-4">
@@ -66,7 +80,40 @@ export function ProjectTaskItem({
           </div>
           <p className="text-sm text-black/50 mb-10">{task.description}</p>
         </div>
-        <button className="text-black/40 hover:text-black">⋮</button>
+        {canEditEtDeleteTask && (
+          <div className="relative">
+            <button
+              onClick={() => setShowMenu((v) => !v)}
+              className="text-black/40 hover:text-black"
+            >
+              ⋮
+            </button>
+
+            {showMenu &&  (
+              <div className="absolute right-0 top-6 z-10 w-40 bg-white border border-black/10 rounded-lg shadow-lg py-1">
+                  <button
+                    onClick={() => {
+                      setShowMenu(false);
+                      onEdit(task)
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-black/5"
+                  >
+                    Modifier la tâche
+                  </button>
+      
+                  <button
+                    onClick={() => {
+                      setShowMenu(false);
+                      handleDeleteTask();
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-black/5"
+                  >
+                    Supprimer la tâche
+                  </button> 
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="text-xs text-black/40">
@@ -82,7 +129,7 @@ export function ProjectTaskItem({
         <div className="flex items-center gap-2">
             Assigné à :
             {task.assignees.map((m) => (
-                <div key={m.id} className="inline-flex items-center gap-1.5">
+                <div key={m.user.id} className="inline-flex items-center gap-1.5">
                 <span className="inline-flex items-center justify-center rounded-full bg-black/5 px-2.5 py-1 text-xs font-normal text-gris">
                   {getInitials(m.user.name ?? m.user.email)}
                 </span>
