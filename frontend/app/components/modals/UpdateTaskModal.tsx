@@ -5,19 +5,8 @@ import { X } from "lucide-react";
 import { updateTask } from "../../services/taskService";
 import type { ProjectDetail, ProjectDetailTask } from "../../services/projectService";
 import { ContributorSelect } from "../ContributorSelect";
-import { getStatusInfo, statusOrder, type TaskStatus } from "@/lib/taskStatus";
+import { getTaskStatus, getStatusInfo, statusOrder, FRONTEND_TO_BACKEND, type TaskStatus } from "@/lib/taskStatus";
 
-const BACKEND_TO_FRONTEND: Record<string, TaskStatus> = {
-  TODO: "A_FAIRE",
-  IN_PROGRESS: "EN_COURS",
-  DONE: "TERMINEE",
-};
-
-const FRONTEND_TO_BACKEND: Record<TaskStatus, string> = {
-  A_FAIRE: "TODO",
-  EN_COURS: "IN_PROGRESS",
-  TERMINEE: "DONE",
-};
 
 function toInputDate(iso: string | null): string {
   if (!iso) return "";
@@ -43,7 +32,7 @@ export function UpdateTaskModal({
   const [description, setDescription] = useState(task.description ?? "");
   const [dueDate, setDueDate] = useState(toInputDate(task.dueDate));
   const [status, setStatus] = useState<TaskStatus>(
-    BACKEND_TO_FRONTEND[task.status] ?? "A_FAIRE"
+    getTaskStatus(task.status) ?? "A_FAIRE"
   );
   const [assigneeIds, setAssigneeIds] = useState<string[]>(
     task.assignees.map((a) => a.user.id)
