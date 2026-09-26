@@ -147,10 +147,6 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
       return;
     }
 
-    if (!dueDate) {
-      sendError(res, "Échéance requise", "BAD_REQUEST", 400);
-      return;
-    }
     const updatedTask = await prisma.task.update({
       where: {id: taskId},
       data: {

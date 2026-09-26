@@ -88,7 +88,7 @@ export function Kanban({
       description: task.description ?? "",
       status: newBackendStatus,
       priority: task.priority,
-      dueDate: task.dueDate ?? undefined,
+      dueDate: task.dueDate,
       assigneeIds: task.assignees.map((a) => a.user.id),
     });
 
