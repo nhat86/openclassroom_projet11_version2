@@ -8,12 +8,14 @@ import { Navbar } from "../../components/Navbar";
 import { getInitials } from "../../../lib/getInitialName";
 import { filteredTasks as filterTask } from "../../../lib/searchTask";
 import { BACKEND_STATUS_MAP, PRIORITY_ORDER } from "../../../lib/taskStatus";
-import { Search, ArrowLeft } from "lucide-react";
+import { Search, ArrowLeft, Sparkle } from "lucide-react";
 import Image from "next/image";
 import  {getProfile, type User} from "../../services/authService";
 import { UpdateProjectModal } from "../../components/modals/UpdateProjectModal";
 import {CreateTaskModal} from "../../components/modals/CreateTaskModal";
 import { UpdateTaskModal } from "../../components/modals/UpdateTaskModal";
+import { GenerateAITasksModal } from "../../components/modals/GenerateAITaskModal";
+
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [project, setProject] = useState<ProjectDetail | null>(null);
@@ -27,6 +29,7 @@ export default function ProjectDetailPage() {
   const [showEditProject, setShowEditProject] = useState(false);
   const [showCreateTask, setShowCreateTask] = useState(false);
   const [editingTask, setEditingTask] = useState<ProjectDetailTask | null>(null);
+  const [showGenerateAi, setShowGenerateAi] = useState(false);
   const displayedTasks = useMemo(() => {
     if (!project) return [];
 
@@ -130,7 +133,11 @@ export default function ProjectDetailPage() {
               >
                 Créer une tâche
               </button>
-              <button className="bg-dark-orange text-white text-sm px-4 py-2.5 rounded-lg">
+              <button
+                onClick={() => setShowGenerateAi(true)}
+                className="flex gap-2 items-center bg-dark-orange text-white text-sm px-4 py-2.5 rounded-lg"
+              >
+                <Sparkle size={20} className="text-white fill-white" />
                 IA
               </button>
             </div>
@@ -268,6 +275,14 @@ export default function ProjectDetailPage() {
             task={editingTask}
             onClose={() => setEditingTask(null)}
             onUpdated={() => id && getProjectById(id).then(setProject)}
+          />
+        )}
+        {/* Modale generate task by AI */}
+        {showGenerateAi && project && (
+          <GenerateAITasksModal
+            projectId={project.id}
+            onClose={() => setShowGenerateAi(false)}
+            onCreated={() => id && getProjectById(id).then(setProject)}
           />
         )}
       </main>
