@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Task } from "../services/taskService";
 import { getStatusInfo } from "../../lib/taskStatus";
+import {useDraggable} from "@dnd-kit/core";
 
 function formatDate(iso: string | null | undefined) {
   if (!iso) return "—";
@@ -25,10 +26,24 @@ export function TaskCard({
   layout?: TaskCardLayout;
 }) {
   const { label, className } = getStatusInfo(task.status);
-
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: `task-${task.id}`,
+    data: { task },
+    disabled: layout !== "kanban",
+  });
+ 
+  const style = transform
+    ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` }
+    : undefined;
+ 
   if (layout === "kanban") {
     return (
-      <div className="border border-black/5 rounded-xl p-4">
+      <div 
+      ref={setNodeRef}
+        style={style}
+        {...listeners}
+        {...attributes}
+      className="border border-black/5 rounded-xl p-4">
         <div>
           <div className="flex items-center justify-between gap-2 mb-1">
             <h4 className="font-medium">{task.title}</h4>
