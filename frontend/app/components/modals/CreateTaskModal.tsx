@@ -48,7 +48,6 @@ export function CreateTaskModal({
       onCreated();
       onClose();
     } catch (error) {
-        console.log("Erreur lors de la création de la tâche", error);
         alert("Erreur lors de la création de la tâche");
     } finally {
       setLoading(false);

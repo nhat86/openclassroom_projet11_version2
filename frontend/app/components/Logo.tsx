@@ -7,6 +7,7 @@ export function Logo({ className = "" }: { className?: string }) {
       alt="Abricot"
       width={160}
       height={40}
+      style={{ width: "auto", height: "auto" }}
       className={`select-none ${className}`}
     />
   );

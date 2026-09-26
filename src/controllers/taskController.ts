@@ -154,7 +154,7 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
         description: description.trim(),
         status,
         priority,
-        dueDate: new Date(dueDate),
+        dueDate: new Date(dueDate)?? undefined,
         assignees: {
           create: Array.isArray(assigneeIds)
           ? assigneeIds.map((userId:string) => ({userId}))

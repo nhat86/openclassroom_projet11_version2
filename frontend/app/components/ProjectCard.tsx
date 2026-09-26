@@ -40,7 +40,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
       <div className="mt-6">
         <p className="flex items-center gap-1.5 text-xs text-black/40 mb-2">
-          <Image src="/equipe.png" alt="Équipe" width={16} height={16} />
+          <Image src="/equipe.png" alt="Équipe" width={16} height={16} style={{ width: "auto", height: "auto" }}/>
           Équipe ({project.members.length + 1})
         </p>
         <div className="flex flex-wrap gap-2">

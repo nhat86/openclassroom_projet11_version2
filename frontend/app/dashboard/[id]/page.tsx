@@ -76,7 +76,7 @@ export default function DashboardPage() {
                 : "bg-white text-dark-orange hover:bg-black/5"
             }`}
           >
-            <Image src="/Group.png" alt="" width={16} height={16} />
+            <Image src="/Group.png" alt="liste" width={16} height={16} style={{ width: "auto", height: "auto" }}/>
             Liste
           </button>
           <button
@@ -87,7 +87,7 @@ export default function DashboardPage() {
                 : "bg-white text-dark-orange hover:bg-black/5"
             }`}
           >
-            <Image src="/Union.png" alt="" width={16} height={16} />
+            <Image src="/Union.png" alt="kanban" width={16} height={16} style={{ width: "auto", height: "auto" }}/>
             Kanban
           </button>
         </div>

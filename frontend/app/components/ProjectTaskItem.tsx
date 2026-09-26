@@ -122,7 +122,12 @@ export function ProjectTaskItem({
                 Échéance :
             </span>
             <span className="flex items-center gap-2">
-            <Image src="/calendrier.png" alt="" width={14} height={14} />
+            <Image 
+            src="/calendrier.png" 
+            alt="Echéance" 
+            width={14} 
+            height={14} 
+            style={{ width: "auto", height: "auto" }}/>
             {formatDate(task.dueDate)}
             </span>
         </div>

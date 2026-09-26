@@ -66,6 +66,7 @@ export function TaskCard({
               alt="Projet"
               width={14}
               height={14}
+              style={{ width: "auto", height: "auto" }}
             />
             {task.project?.name ?? "Projet inconnu"}
           </span>
@@ -76,6 +77,7 @@ export function TaskCard({
               alt="Échéance"
               width={14}
               height={14}
+              style={{ width: "auto", height: "auto" }}
             />
             {formatDate(task.dueDate)}
           </span>

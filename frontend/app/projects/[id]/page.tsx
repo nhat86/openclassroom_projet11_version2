@@ -103,26 +103,30 @@ export default function ProjectDetailPage() {
                     <ArrowLeft size={18} />
                 </button>
                 <h1 className="text-2xl font-semibold">{project.name}</h1>
-                <button
-                  onClick={() => setShowEditProject(true)}
-                  className="text-xs text-dark-orange underline"
-                >
-                  Modifier
-                </button>
-                <button
-                  onClick={async () => {
-                    if (!confirm("Voulez-vous vraiment supprimer ce projet ?")) return;
-                    try {
-                      await deleteProject(project.id);
-                      router.push("/projects");
-                    } catch (error) {
-                      alert("Erreur lors de la suppression");
-                    }
-                  }}
-                  className="text-xs text-red-500 underline"
-                >
-                  Supprimer
-                </button>
+                {isAdmin && (
+                  <>
+                    <button
+                      onClick={() => setShowEditProject(true)}
+                      className="text-xs text-dark-orange underline"
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      onClick={async () => {
+                        if (!confirm("Voulez-vous vraiment supprimer ce projet ?")) return;
+                        try {
+                          await deleteProject(project.id);
+                          router.push("/projects");
+                        } catch (error) {
+                          alert("Erreur lors de la suppression");
+                        }
+                      }}
+                      className="text-xs text-red-500 underline"
+                    >
+                      Supprimer
+                    </button>
+                  </>
+                )}
               </div>
               <p className="text-black/60 mt-1 max-w-2xl">{project.description}</p>
             </div>
@@ -186,7 +190,7 @@ export default function ProjectDetailPage() {
                 }`}
               >
                 <span className="flex items-center gap-1">
-                    <Image src="/Group.png" alt="" width={16} height={16} />
+                    <Image src="/Group.png" alt="liste" width={16} height={16} style={{ width: "auto", height: "auto" }}/>
                     Liste
                 </span>
               </button>
@@ -202,6 +206,7 @@ export default function ProjectDetailPage() {
                         alt="Échéance"
                         width={16}
                         height={16}
+                        style={{ width: "auto", height: "auto" }}
                         color="dark-orange"
                     />
                     Calendrier
