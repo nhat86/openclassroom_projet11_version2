@@ -67,6 +67,7 @@ export function CreateProjectModal({
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
+            data-testid="project-name"
             className="w-full border border-black/10 rounded-lg px-4 py-3 text-sm outline-none focus:border-dark-orange"
           />
         </div>
@@ -78,6 +79,7 @@ export function CreateProjectModal({
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
             required
+            data-testid="project-description"
             className="w-full border border-black/10 rounded-lg px-4 py-3 text-sm outline-none focus:border-dark-orange"
           />
         </div>
@@ -94,6 +96,7 @@ export function CreateProjectModal({
         <button
           type="submit"
           disabled={!canSubmit || loading}
+          data-testid="project-submit"
           className={`block text-center pt-[13px] pr-[74px] pb-[13px] pl-[74px] rounded-lg font-medium transition-colors ${
             canSubmit && !loading
               ? "bg-black text-white hover:bg-black/80"

@@ -49,6 +49,7 @@ export function ContributorSelect({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
+        data-testid="contributor-select"
         className={`w-full flex items-center justify-between border rounded-lg px-4 py-3 text-sm text-left transition-colors ${
           open ? "border-dark-orange" : "border-black/10"
         } ${selectedIds.length === 0 ? "text-black/40" : "text-black"}`}
@@ -72,6 +73,7 @@ export function ContributorSelect({
                 type="checkbox"
                 checked={selectedIds.includes(u.id)}
                 onChange={() => toggle(u.id)}
+                data-testid="contributor-option"
                 className="accent-dark-orange w-4 h-4"
               />
               <span className="w-7 h-7 rounded-full bg-light-orange text-dark-orange text-xs font-semibold flex items-center justify-center shrink-0">
