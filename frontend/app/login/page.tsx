@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 import { Logo } from "../components/Logo";
 import { login } from "../services/authService";
-
+import GoogleSignInButton from "../components/googleSigninButton";
 function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -73,7 +73,7 @@ function LoginForm() {
             >
               {isSubmitting ? "Connexion..." : "Se connecter"}
             </button>
-
+            <GoogleSignInButton />
             {error && <p className="text-sm text-red-600">{error}</p>}
 
             <div className="text-center">
@@ -108,9 +108,12 @@ function LoginForm() {
   );
 }
 export default function LoginPage() 
-{ return ( 
-    <Suspense fallback={null}> 
-        <LoginForm /> 
-    </Suspense> 
-    );
+{ 
+  return ( 
+    <div>
+      <Suspense fallback={null}> 
+          <LoginForm /> 
+      </Suspense> 
+    </div>
+  );
 }

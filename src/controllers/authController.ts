@@ -21,7 +21,7 @@ import {
   sendValidationError,
   sendServerError,
 } from "../utils/response";
-
+import { verifyGoogleToken } from "../lib/google";
 /**
  * @swagger
  * /auth/register:
@@ -224,6 +224,16 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       sendError(
         res,
         "Email ou mot de passe incorrect",
+        "INVALID_CREDENTIALS",
+        401
+      );
+      return;
+    }
+
+    if (!user.password) {
+      sendError(
+        res,
+        "Cet email est associé à une connexion Google",
         "INVALID_CREDENTIALS",
         401
       );
@@ -452,4 +462,58 @@ export const logout = (
     res,
     "Déconnexion réussie"
   );
+};
+
+export const googleLogin = async (req: Request, res: Response) => {
+  try {
+    const { credential } = req.body;
+    if (!credential) {
+      return sendError(res, "Token manquant", "BAD_REQUEST", 400);
+    }
+ 
+    const payload = await verifyGoogleToken(credential);
+    const { sub, email, name, picture } = payload;
+ 
+    if (!email) {
+      return sendError(res, "Email manquant", "BAD_REQUEST", 400);
+    }
+ 
+    let user = await prisma.user.findUnique({
+      where: { googleId: sub },
+    });
+ 
+    if (!user) {
+      user = await prisma.user.findUnique({
+        where: { email: email.toLowerCase() },
+      });
+    }
+ 
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          email: email.toLowerCase(),
+          name: name ?? email.split("@")[0],
+          googleId: sub,
+        },
+      });
+    } else if (!user.googleId) {
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: { googleId: sub },
+      });
+    }
+ 
+    const token = generateToken(user.id, user.email);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    return sendSuccess(res, "Connexion Google réussie", { user });
+  } catch (error) {
+    console.error(error);
+    return sendServerError(res, "Échec de la connexion Google");
+  }
 };
