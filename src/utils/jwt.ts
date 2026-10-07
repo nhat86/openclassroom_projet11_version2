@@ -14,7 +14,7 @@ export const generateToken = (userId: string, email: string): string => {
   };
 
   const secret = process.env.JWT_SECRET;
-  const expiresIn = process.env.JWT_EXPIRES_IN || "7d";
+  const expiresIn = process.env.JWT_EXPIRES_IN || "1h";
 
   if (!secret) {
     throw new Error("JWT_SECRET is not defined in environment variables");

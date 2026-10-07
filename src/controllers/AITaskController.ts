@@ -87,12 +87,12 @@ export const generateTasks = async (req: Request, res: Response): Promise<void> 
                 dueDate: true,
             },
         });
-
+        console.log("[RAG] Tâches existantes :", JSON.stringify(existingTasks, null, 2));
         let context = "Aucune tâche existante.";
 
         if (existingTasks.length >0){
             const taskTexts = existingTasks.map(
-                (t) => 'Titre: ${t.title}. Description: ${t.description ?? ""}'
+              (t) => `Titre: ${t.title}. Description: ${t.description ?? ""}`
             );
             const embeddings = await getMistralEmbeddings([prompt,...taskTexts]);
             const [promptEmbedding, ...taskEmbeddings] = embeddings;
@@ -108,6 +108,8 @@ export const generateTasks = async (req: Request, res: Response): Promise<void> 
                 `Titre: ${s.task.title}\nDescription: ${s.task.description ?? ""}`
             )
             .join("\n\n");
+            console.log("[RAG] Classement par similarité :", JSON.stringify(scored, null, 2));
+            console.log("[RAG] Contexte sélectionné :\n", context);
           }
         const systemPrompt = `
         Tu es un assistant de gestion de projet. Tu aides à générer des tâches pertinentes pour un projet à partir d'une demande utilisateur.
@@ -133,14 +135,14 @@ export const generateTasks = async (req: Request, res: Response): Promise<void> 
         - "description" : obligatoire
         - Uniquement ces 2 champs
         `;
-
+        console.log("[RAG] Prompt système :\n", systemPrompt);
         await new Promise((resolve) => setTimeout(resolve, 1100));
         
         const raw = await chatMistral([
             { role: "system", content: systemPrompt },
             { role: "user", content: prompt },
         ]);
-
+        console.log("[RAG] Réponse brute de Mistral :\n", raw);
         let tasks: DraftTask[] = [];
         try {
             tasks = parseTasksFromText(raw);
@@ -161,7 +163,7 @@ export const generateTasks = async (req: Request, res: Response): Promise<void> 
             dueDate: null,
             assigneeIds: [],
           }));
-
+        console.log("[RAG] Tâches générées :", JSON.stringify(valid, null, 2));
         sendSuccess(res, "Tâches générées", {
             tasks: valid.map((t) => ({
                 ...t,

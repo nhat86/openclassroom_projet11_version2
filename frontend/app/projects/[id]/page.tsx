@@ -81,7 +81,7 @@ export default function ProjectDetailPage() {
   if (error) return <p className="text-red-600">{error}</p>;
   if (!project) return <p>Projet introuvable.</p>;
 
-  const isAdmin =
+  const isAdminOrOwner =
       project.ownerId === user?.id ||
       project.members.some(
         (m) => m.userId === user?.id && m.role === "ADMIN"
@@ -103,7 +103,7 @@ export default function ProjectDetailPage() {
                     <ArrowLeft size={18} />
                 </button>
                 <h1 className="text-2xl font-semibold">{project.name}</h1>
-                {isAdmin && (
+                {isAdminOrOwner && (
                   <>
                     <button
                       onClick={() => setShowEditProject(true)}
@@ -248,7 +248,7 @@ export default function ProjectDetailPage() {
                     key={task.id} 
                     task={task} 
                     currentUser={user}
-                    isAdmin={isAdmin}
+                    isAdmin={isAdminOrOwner}
                     onCommentUpdated={()=> id && getProjectById(id).then(setProject)}
                     onTaskUpdated={() => id && getProjectById(id).then(setProject)}
                     onEdit={setEditingTask}/>
