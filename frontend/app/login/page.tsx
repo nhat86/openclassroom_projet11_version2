@@ -73,7 +73,7 @@ function LoginForm() {
             >
               {isSubmitting ? "Connexion..." : "Se connecter"}
             </button>
-            <GoogleSignInButton />
+            
             {error && <p className="text-sm text-red-600">{error}</p>}
 
             <div className="text-center">
@@ -85,7 +85,9 @@ function LoginForm() {
               </Link>
             </div>
           </form>
-
+          <div className="mt-4">
+            <GoogleSignInButton />
+          </div>
           <p className="text-sm mt-24 text-center">
             Pas encore de compte ?{" "}
             <Link
