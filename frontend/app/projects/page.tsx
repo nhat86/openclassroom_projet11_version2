@@ -5,6 +5,7 @@ import { getProjects, type Project } from "../services/projectService";
 import { ProjectCard } from "../components/ProjectCard";
 import { CreateProjectModal } from "../components/modals/CreateProjectModal";
 import { Navbar } from "../components/Navbar";
+import Footer from "../components/footer";
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -30,9 +31,10 @@ export default function ProjectsPage() {
   }, []);
 
   return (
+    <>
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="px-6 md:px-10 py-10">
+      <main className="px-6 md:px-10 py-10 mx-[100px]">
         <div className="flex items-start justify-between gap-4 flex-wrap mb-8">
           <div>
             <h1 className="text-2xl font-semibold mb-1">Mes projets</h1>
@@ -71,5 +73,7 @@ export default function ProjectsPage() {
         />
       )}
     </div>
+    <Footer/>
+    </>
   );
 }

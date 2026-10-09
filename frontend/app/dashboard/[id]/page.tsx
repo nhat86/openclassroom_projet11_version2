@@ -10,6 +10,7 @@ import { TaskList } from "../../components/TaskList";
 import { Kanban } from "../../components/Kanban";
 import { CreateProjectModal } from "../../components/modals/CreateProjectModal";
 import { filteredTasks as filterTasks } from "../../../lib/searchTask";
+import Footer from "@/app/components/footer";
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
@@ -46,9 +47,10 @@ export default function DashboardPage() {
   }
 
   return (
+    <>
     <div className="flex-1 flex flex-col bg-background">
       <Navbar />
-      <main className="flex-1 px-6 md:px-10 py-10">
+      <main className="flex-1 px-6 md:px-10 py-10 mx-[100px]">
         
         {/* Bar de presentation et bouton de création de projet */}
         <div className="flex items-start justify-between gap-4 flex-wrap mb-8">
@@ -93,7 +95,7 @@ export default function DashboardPage() {
         </div>
         {/* Liste des projets */}
         {view === "liste" ? (
-          <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-8">
+          <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-8 py-[60px]">
             <div className="flex items-center justify-between gap-4 flex-wrap mb-6">
               <div>
                 <h2 className="font-semibold text-lg">Mes tâches assignées</h2>
@@ -137,5 +139,7 @@ export default function DashboardPage() {
         />
       )}
     </div>
+    <Footer/>
+    </>
   );
 }

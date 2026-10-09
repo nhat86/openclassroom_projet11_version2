@@ -15,6 +15,7 @@ import { UpdateProjectModal } from "../../components/modals/UpdateProjectModal";
 import {CreateTaskModal} from "../../components/modals/CreateTaskModal";
 import { UpdateTaskModal } from "../../components/modals/UpdateTaskModal";
 import { GenerateAITasksModal } from "../../components/modals/GenerateAITaskModal";
+import Footer from "../../components/footer";
 
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -88,9 +89,10 @@ export default function ProjectDetailPage() {
       );
 
   return (
+    <>
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="px-6 md:px-10 py-10">
+      <main className="px-6 md:px-10 py-10 mx-[100px]">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-start justify-between gap-4 flex-wrap mb-2">
@@ -292,5 +294,7 @@ export default function ProjectDetailPage() {
         )}
       </main>
     </div>
+    <Footer/>
+    </>
   );
 }
