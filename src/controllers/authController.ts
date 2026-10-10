@@ -129,7 +129,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         id: true,
         email: true,
         name: true,
-        createdAt: true,
+        created_at: true,
       },
     });
 
@@ -267,7 +267,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       id: user.id,
       email: user.email,
       name: user.name,
-      createdAt: user.createdAt,
+      created_at: user.created_at,
     };
 
     // Envoyer la réponse
@@ -373,24 +373,24 @@ export const updateProfile = async (
     }
 
     // Préparer les données de mise à jour
-    const updateData: any = {};
+    const updated_ata: any = {};
     if (name !== undefined) {
-      updateData.name = name.trim() || null;
+      updated_ata.name = name.trim() || null;
     }
     if (email !== undefined) {
-      updateData.email = email.toLowerCase();
+      updated_ata.email = email.toLowerCase();
     }
 
     // Mettre à jour l'utilisateur
     const updatedUser = await prisma.user.update({
       where: { id: authReq.user.id },
-      data: updateData,
+      data: updated_ata,
       select: {
         id: true,
         email: true,
         name: true,
-        createdAt: true,
-        updatedAt: true,
+        created_at: true,
+        updated_at: true,
       },
     });
 

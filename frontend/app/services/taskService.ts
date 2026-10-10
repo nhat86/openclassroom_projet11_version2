@@ -5,7 +5,7 @@ export interface Task {
   description: string | null;
   status: string;
   priority: string;
-  dueDate: string | null;
+  due_date: string | null;
   project: {
     id: string;
     name: string;
@@ -17,7 +17,7 @@ export interface Task {
   comments: Array<{
     id: string;
     content: string;
-    createdAt: string;
+    created_at: string;
     author: { name: string | null; email: string };
   }>;
 }
@@ -38,17 +38,17 @@ export async function getUserTasks(): Promise<Task[]> {
 }
 
 export async function createTask(
-  projectId: string,
+  project_id: string,
   data: {
     title: string;
     description?: string;
     status?: string;
     priority?: string;
-    dueDate?: string;
+    due_date?: string;
     assigneeIds?: string[];
   }
 ): Promise<Task> {
-  const res = await fetch(`${API_URL}/projects/${projectId}/tasks`, {
+  const res = await fetch(`${API_URL}/projects/${project_id}/tasks`, {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
@@ -60,18 +60,18 @@ export async function createTask(
 }
 
 export async function updateTask(
-  projectId: string,
-  taskId: string,
+  project_id: string,
+  task_id: string,
   data: {
     title: string;
     description?: string;
     status: string;
     priority: string;
-    dueDate?: string;
+    due_date?: string;
     assigneeIds: string[];
   }
 ): Promise<Task>{
-  const res = await fetch(`${API_URL}/projects/${projectId}/tasks/${taskId}`, {
+  const res = await fetch(`${API_URL}/projects/${project_id}/tasks/${task_id}`, {
     method: "PUT",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
@@ -83,10 +83,10 @@ export async function updateTask(
 }
 
 export async function deleteTask(
-  projectId: string,
-  taskId: string,
+  project_id: string,
+  task_id: string,
 ): Promise<void>{
-  const res = await fetch(`${API_URL}/projects/${projectId}/tasks/${taskId}`, {
+  const res = await fetch(`${API_URL}/projects/${project_id}/tasks/${task_id}`, {
     method: "DELETE",
     credentials: "include",
   });

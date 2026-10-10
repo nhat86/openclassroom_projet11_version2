@@ -14,17 +14,17 @@ function emptyTask(): GeneratedTask {
     description: "",
     status: "TODO",
     priority: "MEDIUM",
-    dueDate: null,
+    due_date: null,
     assigneeIds: [],
   };
 }
 
 export function GenerateAITasksModal({
-  projectId,
+  project_id,
   onClose,
   onCreated,
 }: {
-  projectId: string;
+  project_id: string;
   onClose: () => void;
   onCreated: () => void;
 }) {
@@ -41,7 +41,7 @@ export function GenerateAITasksModal({
     if (!p) return;
     setLoading(true);
     try {
-      const tasks = await generateTasks(projectId, p);
+      const tasks = await generateTasks(project_id, p);
       const newDrafts = tasks.length > 0 ? tasks : [emptyTask()];
       setDrafts((prev) =>
         prev.length === 0 ? newDrafts : [...prev, ...newDrafts]
@@ -90,7 +90,7 @@ export function GenerateAITasksModal({
     }
     setSaving(true);
     try {
-      await createTasksBatch(projectId, valid);
+      await createTasksBatch(project_id, valid);
       onCreated();
       onClose();
     } catch (error) {

@@ -17,7 +17,7 @@ export function UpdateProjectModal({
   const [name, setName] = useState(project.name);
   const [description, setDescription] = useState(project.description);
   const [contributorIds, setContributorIds] = useState<string[]>(
-    project.members.map((m) => m.userId)
+    project.members.map((m) => m.user_id)
   );
   const [users, setUsers] = useState<{ id: string; name: string | null; email: string }[]>([]);
   const [loading, setLoading] = useState(false);

@@ -5,15 +5,15 @@ export interface GeneratedTask {
   description: string;
   status?: string
   priority?: string;
-  dueDate?: string | null;
+  due_date?: string | null;
   assigneeIds?: string[];
 }
 
 export async function generateTasks(
-  projectId: string,
+  project_id: string,
   prompt: string
 ): Promise<GeneratedTask[]> {
-  const res = await fetch(`${API_URL}/projects/${projectId}/tasks/generate`, {
+  const res = await fetch(`${API_URL}/projects/${project_id}/tasks/generate`, {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
@@ -25,10 +25,10 @@ export async function generateTasks(
 }
 
 export async function createTasksBatch(
-  projectId: string,
+  project_id: string,
   tasks: GeneratedTask[]
 ): Promise<void> {
-  const res = await fetch(`${API_URL}/projects/${projectId}/tasks/batch`, {
+  const res = await fetch(`${API_URL}/projects/${project_id}/tasks/batch`, {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },

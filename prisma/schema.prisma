@@ -17,7 +17,7 @@ model User {
   name      String?
   google_id  String?  @unique
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @updated_at
 
   // Relations
   ownedProjects     Project[]       @relation("ProjectOwner")
@@ -34,7 +34,7 @@ model Project {
   name        String
   description String?
   created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+  updated_at   DateTime @updated_at
 
   // Relations
   owner_id     String
@@ -68,7 +68,7 @@ model Task {
   priority    String   @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
   due_date     DateTime?
   created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+  updated_at   DateTime @updated_at
 
   // Relations
   project_id   String
@@ -99,7 +99,7 @@ model Comment {
   id        String   @id @default(cuid())
   content   String
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  updated_at DateTime @updated_at
 
   // Relations
   task_id    String

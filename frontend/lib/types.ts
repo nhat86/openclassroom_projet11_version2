@@ -23,15 +23,15 @@ export type Comment = {
   authorInitials: string;
   authorName: string;
   content: string;
-  createdAt: string;
+  created_at: string;
 };
 
 export type Task = {
   id: string;
-  projectId: string;
+  project_id: string;
   title: string;
   description: string;
-  dueDate: string;
+  due_date: string;
   status: TaskStatus;
   assigneeIds: string[];
   comments: Comment[];

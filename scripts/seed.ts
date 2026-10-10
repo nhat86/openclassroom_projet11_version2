@@ -20,14 +20,14 @@ interface SeedTask {
   description: string;
   status: "TODO" | "IN_PROGRESS" | "DONE" | "CANCELLED";
   priority: "LOW" | "MEDIUM" | "HIGH";
-  dueDate: Date;
+  due_date: Date;
   projectName: string;
   assignees: string[];
 }
 
 interface SeedComment {
   content: string;
-  authorId: string;
+  author_id: string;
 }
 
 // Données de test
@@ -121,7 +121,7 @@ const tasks: SeedTask[] = [
       "Créer le schéma de base de données pour les produits, utilisateurs, commandes et paiements.",
     status: "DONE",
     priority: "HIGH",
-    dueDate: new Date("2024-01-15"),
+    due_date: new Date("2024-01-15"),
     projectName: "Application E-commerce",
     assignees: ["bob@example.com", "caroline@example.com"],
   },
@@ -131,7 +131,7 @@ const tasks: SeedTask[] = [
       "Implémenter les endpoints pour la gestion des produits, panier et commandes.",
     status: "IN_PROGRESS",
     priority: "HIGH",
-    dueDate: new Date("2024-02-01"),
+    due_date: new Date("2024-02-01"),
     projectName: "Application E-commerce",
     assignees: ["david@example.com"],
   },
@@ -141,7 +141,7 @@ const tasks: SeedTask[] = [
       "Créer les composants React pour la liste des produits, panier et checkout.",
     status: "TODO",
     priority: "MEDIUM",
-    dueDate: new Date("2024-02-15"),
+    due_date: new Date("2024-02-15"),
     projectName: "Application E-commerce",
     assignees: ["alice@example.com", "caroline@example.com"],
   },
@@ -150,7 +150,7 @@ const tasks: SeedTask[] = [
     description: "Intégrer Stripe pour le traitement des paiements sécurisés.",
     status: "TODO",
     priority: "HIGH",
-    dueDate: new Date("2024-02-28"),
+    due_date: new Date("2024-02-28"),
     projectName: "Application E-commerce",
     assignees: ["bob@example.com"],
   },
@@ -160,7 +160,7 @@ const tasks: SeedTask[] = [
       "Écrire les tests unitaires et d'intégration pour l'API et l'interface.",
     status: "TODO",
     priority: "MEDIUM",
-    dueDate: new Date("2024-03-10"),
+    due_date: new Date("2024-03-10"),
     projectName: "Application E-commerce",
     assignees: ["david@example.com", "caroline@example.com"],
   },
@@ -172,7 +172,7 @@ const tasks: SeedTask[] = [
       "Développer le système de demande et validation des congés avec workflow d'approbation.",
     status: "IN_PROGRESS",
     priority: "HIGH",
-    dueDate: new Date("2024-01-20"),
+    due_date: new Date("2024-01-20"),
     projectName: "Système de Gestion RH",
     assignees: ["emma@example.com", "francois@example.com"],
   },
@@ -182,7 +182,7 @@ const tasks: SeedTask[] = [
       "Créer les formulaires d'évaluation et le système de notation.",
     status: "TODO",
     priority: "MEDIUM",
-    dueDate: new Date("2024-02-05"),
+    due_date: new Date("2024-02-05"),
     projectName: "Système de Gestion RH",
     assignees: ["gabrielle@example.com"],
   },
@@ -192,7 +192,7 @@ const tasks: SeedTask[] = [
       "Dashboard avec statistiques sur les effectifs, congés et performances.",
     status: "TODO",
     priority: "LOW",
-    dueDate: new Date("2024-02-20"),
+    due_date: new Date("2024-02-20"),
     projectName: "Système de Gestion RH",
     assignees: ["emma@example.com"],
   },
@@ -203,7 +203,7 @@ const tasks: SeedTask[] = [
     description: "Créer les maquettes et prototypes pour l'application mobile.",
     status: "DONE",
     priority: "HIGH",
-    dueDate: new Date("2024-01-10"),
+    due_date: new Date("2024-01-10"),
     projectName: "Application Mobile Fitness",
     assignees: ["henri@example.com"],
   },
@@ -213,7 +213,7 @@ const tasks: SeedTask[] = [
       "Implémenter les écrans d'accueil, profil utilisateur et suivi d'entraînement.",
     status: "IN_PROGRESS",
     priority: "HIGH",
-    dueDate: new Date("2024-01-25"),
+    due_date: new Date("2024-01-25"),
     projectName: "Application Mobile Fitness",
     assignees: ["isabelle@example.com", "henri@example.com"],
   },
@@ -223,7 +223,7 @@ const tasks: SeedTask[] = [
       "Connecter l'app à une API de données nutritionnelles pour les calories et nutriments.",
     status: "TODO",
     priority: "MEDIUM",
-    dueDate: new Date("2024-02-10"),
+    due_date: new Date("2024-02-10"),
     projectName: "Application Mobile Fitness",
     assignees: ["henri@example.com"],
   },
@@ -235,7 +235,7 @@ const tasks: SeedTask[] = [
       "Créer l'interface d'administration pour ajouter et organiser les cours.",
     status: "DONE",
     priority: "HIGH",
-    dueDate: new Date("2024-01-05"),
+    due_date: new Date("2024-01-05"),
     projectName: "Plateforme de Formation",
     assignees: ["jacques@example.com"],
   },
@@ -245,7 +245,7 @@ const tasks: SeedTask[] = [
       "Développer un lecteur vidéo avec contrôles de progression et notes.",
     status: "IN_PROGRESS",
     priority: "HIGH",
-    dueDate: new Date("2024-01-30"),
+    due_date: new Date("2024-01-30"),
     projectName: "Plateforme de Formation",
     assignees: ["alice@example.com", "jacques@example.com"],
   },
@@ -255,7 +255,7 @@ const tasks: SeedTask[] = [
       "Créer les quiz avec questions à choix multiples et évaluation automatique.",
     status: "TODO",
     priority: "MEDIUM",
-    dueDate: new Date("2024-02-15"),
+    due_date: new Date("2024-02-15"),
     projectName: "Plateforme de Formation",
     assignees: ["alice@example.com"],
   },
@@ -267,7 +267,7 @@ const tasks: SeedTask[] = [
       "Concevoir l'architecture pour la collecte et le stockage des données analytiques.",
     status: "DONE",
     priority: "HIGH",
-    dueDate: new Date("2024-01-08"),
+    due_date: new Date("2024-01-08"),
     projectName: "Dashboard Analytics",
     assignees: ["bob@example.com"],
   },
@@ -277,7 +277,7 @@ const tasks: SeedTask[] = [
       "Implémenter les composants de visualisation avec Chart.js ou D3.js.",
     status: "IN_PROGRESS",
     priority: "HIGH",
-    dueDate: new Date("2024-01-22"),
+    due_date: new Date("2024-01-22"),
     projectName: "Dashboard Analytics",
     assignees: ["emma@example.com", "henri@example.com"],
   },
@@ -287,7 +287,7 @@ const tasks: SeedTask[] = [
       "Créer le système de notifications pour les seuils et anomalies détectées.",
     status: "TODO",
     priority: "MEDIUM",
-    dueDate: new Date("2024-02-08"),
+    due_date: new Date("2024-02-08"),
     projectName: "Dashboard Analytics",
     assignees: ["bob@example.com"],
   },
@@ -298,114 +298,114 @@ const comments: SeedComment[] = [
   {
     content:
       "Base de données créée avec succès. Toutes les tables sont en place et les relations sont correctes.",
-    authorId: "",
+    author_id: "",
   },
   {
     content:
       "API REST en cours de développement. Les endpoints produits et utilisateurs sont terminés.",
-    authorId: "",
+    author_id: "",
   },
   {
     content:
       "Interface responsive en cours. Les composants de base sont créés, reste à implémenter le panier.",
-    authorId: "",
+    author_id: "",
   },
   {
     content:
       "Intégration Stripe prévue pour la semaine prochaine. Documentation consultée.",
-    authorId: "",
+    author_id: "",
   },
   {
     content:
       "Tests unitaires écrits pour 80% des fonctions. Tests d'intégration à venir.",
-    authorId: "",
+    author_id: "",
   },
   {
     content: "Module congés bien avancé. Workflow d'approbation fonctionnel.",
-    authorId: "",
+    author_id: "",
   },
   {
     content:
       "Formulaires d'évaluation créés. Interface intuitive et responsive.",
-    authorId: "",
+    author_id: "",
   },
   {
     content: "Dashboard RH en cours. Statistiques de base affichées.",
-    authorId: "",
+    author_id: "",
   },
   {
     content:
       "Design mobile terminé et validé par le client. Interface moderne et intuitive.",
-    authorId: "",
+    author_id: "",
   },
   {
     content:
       "Écrans principaux en développement. Navigation fluide entre les sections.",
-    authorId: "",
+    author_id: "",
   },
   {
     content:
       "API nutrition identifiée. Documentation reçue, intégration prévue.",
-    authorId: "",
+    author_id: "",
   },
   {
     content:
       "Système de cours opérationnel. Interface d'administration complète.",
-    authorId: "",
+    author_id: "",
   },
   {
     content: "Lecteur vidéo en cours. Contrôles de base implémentés.",
-    authorId: "",
+    author_id: "",
   },
   {
     content: "Quiz interactif en développement. Système de notation en place.",
-    authorId: "",
+    author_id: "",
   },
   {
     content:
       "Architecture données validée. Performance optimisée pour les gros volumes.",
-    authorId: "",
+    author_id: "",
   },
   {
     content:
       "Graphiques en cours. Chart.js intégré, premiers graphiques affichés.",
-    authorId: "",
+    author_id: "",
   },
   {
     content:
       "Système d'alertes planifié. Notifications par email et push prévues.",
-    authorId: "",
+    author_id: "",
   },
   {
     content:
       "Excellent travail sur cette tâche ! Le code est propre et bien documenté.",
-    authorId: "",
+    author_id: "",
   },
   {
     content:
       "Attention à la sécurité des données. Vérifier les permissions utilisateur.",
-    authorId: "",
+    author_id: "",
   },
-  { content: "Deadline respectée, bravo à toute l'équipe !", authorId: "" },
+  { content: "Deadline respectée, bravo à toute l'équipe !", author_id: "" },
   {
     content: "Petit bug détecté sur mobile. À corriger avant la livraison.",
-    authorId: "",
+    author_id: "",
   },
   {
     content: "Documentation mise à jour. Tutoriel d'utilisation créé.",
-    authorId: "",
+    author_id: "",
   },
   {
     content: "Tests de charge effectués. Performance satisfaisante.",
-    authorId: "",
+    author_id: "",
   },
   {
     content: "Code review terminée. Quelques améliorations mineures suggérées.",
-    authorId: "",
+    author_id: "",
   },
   {
     content: "Déploiement en production réussi. Monitoring en place.",
-    authorId: "",
+    author_id: "",
   },
 ];
 
@@ -444,8 +444,8 @@ async function seed() {
     const createdProjects: { [name: string]: string } = {};
 
     for (const projectData of projects) {
-      const ownerId = createdUsers[projectData.ownerEmail];
-      if (!ownerId) {
+      const owner_id = createdUsers[projectData.ownerEmail];
+      if (!owner_id) {
         throw new Error(
           `Owner introuvable pour le projet ${projectData.name}: ${projectData.ownerEmail}`
         );
@@ -455,7 +455,7 @@ async function seed() {
         data: {
           name: projectData.name,
           description: projectData.description,
-          ownerId,
+          owner_id,
         },
       });
       createdProjects[projectData.name] = project.id;
@@ -468,8 +468,8 @@ async function seed() {
         if (createdUsers[contributorEmail]) {
           await prisma.projectMember.create({
             data: {
-              userId: createdUsers[contributorEmail],
-              projectId: project.id,
+              user_id: createdUsers[contributorEmail],
+              project_id: project.id,
               role: "CONTRIBUTOR",
             },
           });
@@ -483,8 +483,8 @@ async function seed() {
     let taskIndex = 0;
 
     for (const taskData of tasks) {
-      const projectId = createdProjects[taskData.projectName];
-      if (!projectId) {
+      const project_id = createdProjects[taskData.projectName];
+      if (!project_id) {
         throw new Error(
           `Projet introuvable pour la tâche "${taskData.title}": ${taskData.projectName}`
         );
@@ -492,7 +492,7 @@ async function seed() {
 
       // Le créateur de la tâche est l'owner du projet
       const projectData = projects.find((p) => p.name === taskData.projectName);
-      const creatorId = createdUsers[projectData!.ownerEmail];
+      const creator_id = createdUsers[projectData!.ownerEmail];
 
       const task = await prisma.task.create({
         data: {
@@ -500,9 +500,9 @@ async function seed() {
           description: taskData.description,
           status: taskData.status,
           priority: taskData.priority,
-          dueDate: taskData.dueDate,
-          projectId,
-          creatorId,
+          due_date: taskData.due_date,
+          project_id,
+          creator_id,
         },
       });
       console.log(`✅ Tâche créée: ${taskData.title}`);
@@ -512,8 +512,8 @@ async function seed() {
         if (createdUsers[assigneeEmail]) {
           await prisma.taskAssignee.create({
             data: {
-              userId: createdUsers[assigneeEmail],
-              taskId: task.id,
+              user_id: createdUsers[assigneeEmail],
+              task_id: task.id,
             },
           });
           console.log(`  👤 Assigné: ${assigneeEmail}`);
@@ -535,8 +535,8 @@ async function seed() {
           await prisma.comment.create({
             data: {
               content: commentData.content,
-              authorId: createdUsers[authorEmail],
-              taskId: task.id,
+              author_id: createdUsers[authorEmail],
+              task_id: task.id,
             },
           });
           console.log(`  💬 Commentaire ajouté par ${authorEmail}`);

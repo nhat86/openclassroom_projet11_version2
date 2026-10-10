@@ -3,13 +3,13 @@ import { JwtPayload } from "../types";
 
 /**
  * Génère un token JWT pour un utilisateur
- * @param userId - L'ID de l'utilisateur
+ * @param user_id - L'ID de l'utilisateur
  * @param email - L'email de l'utilisateur
  * @returns Le token JWT généré
  */
-export const generateToken = (userId: string, email: string): string => {
+export const generateToken = (user_id: string, email: string): string => {
   const payload: JwtPayload = {
-    userId,
+    user_id,
     email,
   };
 

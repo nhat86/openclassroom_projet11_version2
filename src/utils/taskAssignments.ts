@@ -2,30 +2,30 @@ import prisma from "../lib/prisma";
 
 /**
  * Vérifie si les utilisateurs sont membres du projet (owner inclus)
- * @param projectId - ID du projet
- * @param userIds - IDs des utilisateurs à vérifier
+ * @param project_id - ID du projet
+ * @param user_ids - IDs des utilisateurs à vérifier
  * @returns true si tous les utilisateurs sont membres ou owner, false sinon
  */
 export const validateProjectMembers = async (
-  projectId: string,
-  userIds: string[]
+  project_id: string,
+  user_ids: string[]
 ): Promise<boolean> => {
-  if (userIds.length === 0) return true;
+  if (user_ids.length === 0) return true;
 
   const project = await prisma.project.findUnique({
-    where: { id: projectId },
-    select: { ownerId: true },
+    where: { id: project_id },
+    select: { owner_id: true },
   });
 
   if (!project) return false;
 
-  const remainingIds = userIds.filter((id) => id !== project.ownerId);
+  const remainingIds = user_ids.filter((id) => id !== project.owner_id);
   if (remainingIds.length === 0) return true;
 
   const projectMembers = await prisma.projectMember.findMany({
     where: {
-      projectId,
-      userId: { in: remainingIds },
+      project_id,
+      user_id: { in: remainingIds },
     },
   });
 
@@ -34,24 +34,24 @@ export const validateProjectMembers = async (
 
 /**
  * Met à jour les assignations d'une tâche
- * @param taskId - ID de la tâche
+ * @param task_id - ID de la tâche
  * @param assigneeIds - IDs des utilisateurs à assigner
  */
 export const updateTaskAssignments = async (
-  taskId: string,
+  task_id: string,
   assigneeIds: string[]
 ): Promise<void> => {
   // Supprimer toutes les assignations existantes
   await prisma.taskAssignee.deleteMany({
-    where: { taskId },
+    where: { task_id },
   });
 
   // Ajouter les nouvelles assignations
   if (assigneeIds.length > 0) {
     await prisma.taskAssignee.createMany({
-      data: assigneeIds.map((userId) => ({
-        taskId,
-        userId,
+      data: assigneeIds.map((user_id) => ({
+        task_id,
+        user_id,
       })),
     });
   }
@@ -59,12 +59,12 @@ export const updateTaskAssignments = async (
 
 /**
  * Récupère les assignations d'une tâche avec les détails des utilisateurs
- * @param taskId - ID de la tâche
+ * @param task_id - ID de la tâche
  * @returns Les assignations avec les détails des utilisateurs
  */
-export const getTaskAssignments = async (taskId: string) => {
+export const getTaskAssignments = async (task_id: string) => {
   const assignees = await prisma.taskAssignee.findMany({
-    where: { taskId },
+    where: { task_id },
     include: {
       user: {
         select: {

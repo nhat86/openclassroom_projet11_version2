@@ -128,7 +128,7 @@ export function ProjectTaskItem({
             width={14} 
             height={14} 
             style={{ width: "auto", height: "auto" }}/>
-            {formatDate(task.dueDate)}
+            {formatDate(task.due_date)}
             </span>
         </div>
         <div className="flex items-center gap-2">

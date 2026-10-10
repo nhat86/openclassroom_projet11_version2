@@ -4,8 +4,8 @@ import { createComment, updateComment, deleteComment } from "../controllers/comm
 
 const router = express.Router();
 router.use(authenticateToken);
-router.post("/projects/:projectId/tasks/:taskId/comments", createComment);
-router.put("/projects/:projectId/tasks/:taskId/comments/:commentId", updateComment);
-router.delete("/projects/:projectId/tasks/:taskId/comments/:commentId", deleteComment);
+router.post("/projects/:project_id/tasks/:task_id/comments", createComment);
+router.put("/projects/:project_id/tasks/:task_id/comments/:commentId", updateComment);
+router.delete("/projects/:project_id/tasks/:task_id/comments/:commentId", deleteComment);
  
 export default router;

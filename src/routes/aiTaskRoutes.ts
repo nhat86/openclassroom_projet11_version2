@@ -5,7 +5,7 @@ import { generateTasks, createTasksBatch } from "../controllers/AITaskController
 const router = express.Router();
 router.use(authenticateToken);
 
-router.post("/projects/:projectId/tasks/generate", generateTasks);
-router.post("/projects/:projectId/tasks/batch", createTasksBatch);
+router.post("/projects/:project_id/tasks/generate", generateTasks);
+router.post("/projects/:project_id/tasks/batch", createTasksBatch);
 
 export default router;

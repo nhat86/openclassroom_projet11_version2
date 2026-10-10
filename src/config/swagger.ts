@@ -53,12 +53,12 @@ const options = {
               type: "string",
               description: "Nom de l'utilisateur",
             },
-            createdAt: {
+            created_at: {
               type: "string",
               format: "date-time",
               description: "Date de création du compte",
             },
-            updatedAt: {
+            updated_at: {
               type: "string",
               format: "date-time",
               description: "Date de dernière modification",
@@ -81,7 +81,7 @@ const options = {
               type: "string",
               description: "Description du projet",
             },
-            ownerId: {
+            owner_id: {
               type: "string",
               description: "ID du propriétaire du projet",
             },
@@ -94,16 +94,16 @@ const options = {
                 $ref: "#/components/schemas/ProjectMember",
               },
             },
-            createdAt: {
+            created_at: {
               type: "string",
               format: "date-time",
             },
-            updatedAt: {
+            updated_at: {
               type: "string",
               format: "date-time",
             },
           },
-          required: ["id", "name", "ownerId"],
+          required: ["id", "name", "owner_id"],
         },
         ProjectMember: {
           type: "object",
@@ -150,16 +150,16 @@ const options = {
               enum: ["LOW", "MEDIUM", "HIGH", "URGENT"],
               description: "Priorité de la tâche",
             },
-            dueDate: {
+            due_date: {
               type: "string",
               format: "date-time",
               description: "Date d'échéance de la tâche",
             },
-            projectId: {
+            project_id: {
               type: "string",
               description: "ID du projet associé",
             },
-            creatorId: {
+            creator_id: {
               type: "string",
               description: "ID du créateur de la tâche",
             },
@@ -175,11 +175,11 @@ const options = {
                 $ref: "#/components/schemas/Comment",
               },
             },
-            createdAt: {
+            created_at: {
               type: "string",
               format: "date-time",
             },
-            updatedAt: {
+            updated_at: {
               type: "string",
               format: "date-time",
             },
@@ -189,8 +189,8 @@ const options = {
             "title",
             "status",
             "priority",
-            "projectId",
-            "creatorId",
+            "project_id",
+            "creator_id",
           ],
         },
         TaskAssignee: {
@@ -199,10 +199,10 @@ const options = {
             id: {
               type: "string",
             },
-            userId: {
+            user_id: {
               type: "string",
             },
-            taskId: {
+            task_id: {
               type: "string",
             },
             user: {
@@ -225,27 +225,27 @@ const options = {
               type: "string",
               description: "Contenu du commentaire",
             },
-            taskId: {
+            task_id: {
               type: "string",
               description: "ID de la tâche associée",
             },
-            authorId: {
+            author_id: {
               type: "string",
               description: "ID de l'auteur du commentaire",
             },
             author: {
               $ref: "#/components/schemas/User",
             },
-            createdAt: {
+            created_at: {
               type: "string",
               format: "date-time",
             },
-            updatedAt: {
+            updated_at: {
               type: "string",
               format: "date-time",
             },
           },
-          required: ["id", "content", "taskId", "authorId"],
+          required: ["id", "content", "task_id", "author_id"],
         },
         Error: {
           type: "object",

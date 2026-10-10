@@ -2,12 +2,12 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 export interface Comment{
     id: string;
     content: string;
-    createdAt: string;
-    updatedAt: string;
+    created_at: string;
+    updated_at: string;
     author: { id: string; name: string | null; email: string };
 }
-export async function createComment(taskId: string, projectId: string, content: string): Promise<Comment> {
-    const response = await fetch(`${API_URL}/projects/${projectId}/tasks/${taskId}/comments`, {
+export async function createComment(task_id: string, project_id: string, content: string): Promise<Comment> {
+    const response = await fetch(`${API_URL}/projects/${project_id}/tasks/${task_id}/comments`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -23,8 +23,8 @@ export async function createComment(taskId: string, projectId: string, content: 
     return result.data.comment;
 }
 
-export async function updateComment(taskId: string, projectId: string, commentId: string, content: string): Promise<Comment> {
-    const response = await fetch(`${API_URL}/projects/${projectId}/tasks/${taskId}/comments/${commentId}`, {
+export async function updateComment(task_id: string, project_id: string, commentId: string, content: string): Promise<Comment> {
+    const response = await fetch(`${API_URL}/projects/${project_id}/tasks/${task_id}/comments/${commentId}`, {
         method: "PUT",
         credentials: "include",
         headers: {
@@ -39,8 +39,8 @@ export async function updateComment(taskId: string, projectId: string, commentId
     return result.data.comment;
 }
 
-export async function deleteComment(taskId: string, projectId: string, commentId: string): Promise<Comment | void> {
-    const response = await fetch(`${API_URL}/projects/${projectId}/tasks/${taskId}/comments/${commentId}`, {
+export async function deleteComment(task_id: string, project_id: string, commentId: string): Promise<Comment | void> {
+    const response = await fetch(`${API_URL}/projects/${project_id}/tasks/${task_id}/comments/${commentId}`, {
         method: "DELETE",
         credentials: "include",
     });

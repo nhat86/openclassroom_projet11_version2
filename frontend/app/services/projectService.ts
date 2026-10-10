@@ -9,8 +9,8 @@ export interface ProjectMember {
   id: string;
   role: string;
   joinedAt: string;
-  userId: string;
-  projectId: string;
+  user_id: string;
+  project_id: string;
   user: UserContributor;
 }
  
@@ -23,9 +23,9 @@ export interface Project {
   id: string;
   name: string;
   description: string;
-  createdAt: string;
-  updatedAt: string;
-  ownerId: string;
+  created_at: string;
+  updated_at: string;
+  owner_id: string;
   owner: UserContributor;
   members: ProjectMember[];
   tasks: ProjectTask[];
@@ -35,8 +35,8 @@ export interface ProjectDetailMember{
     id: string;
     role: string;
     joinedAt: string;
-    userId: string;
-    projectId: string;
+    user_id: string;
+    project_id: string;
     user: UserContributor;
 }
  
@@ -47,7 +47,7 @@ export interface ProjectDetailTaskAssignee {
 export interface ProjectDetailTaskComment {
   id: string;
   content: string;
-  createdAt: string;
+  created_at: string;
   author: { id: string; name: string | null };
 }
  
@@ -57,8 +57,8 @@ export interface ProjectDetailTask {
   description: string | null;
   status: string;
   priority: string;
-  dueDate: string | null;
-  createdAt: string;
+  due_date: string | null;
+  created_at: string;
   project: { id: string; name: string };
   creator: { id: string; name: string | null };
   assignees: ProjectDetailTaskAssignee[];
@@ -69,9 +69,9 @@ export interface ProjectDetail {
   id: string;
   name: string;
   description: string;
-  createdAt: string;
-  updatedAt: string;
-  ownerId: string;
+  created_at: string;
+  updated_at: string;
+  owner_id: string;
   owner: UserContributor;
   members: ProjectDetailMember[];
   tasks: ProjectDetailTask[];
@@ -124,8 +124,8 @@ export async function getProjects(): Promise<Project[]> {
   return result.data.projects;
 }
 
-export async function getProjectById(projectId: string): Promise<ProjectDetail> {
-  const res = await fetch(`${API_URL}/projects/${projectId}`, {
+export async function getProjectById(project_id: string): Promise<ProjectDetail> {
+  const res = await fetch(`${API_URL}/projects/${project_id}`, {
     method: "GET",
     credentials: "include",
   });
@@ -137,14 +137,14 @@ export async function getProjectById(projectId: string): Promise<ProjectDetail> 
 }
 
 export async function updateProject(
-  projectId: string,
+  project_id: string,
   data: {
     name: string;
     description: string;
     contributorIds: string[];
   }
 ): Promise<Project> {
-  const res = await fetch(`${API_URL}/projects/${projectId}`, {
+  const res = await fetch(`${API_URL}/projects/${project_id}`, {
     method: "PUT",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
@@ -155,8 +155,8 @@ export async function updateProject(
   return result.data.project;
 }
 
-export async function deleteProject(projectId: string): Promise<void> {
-  const res = await fetch(`${API_URL}/projects/${projectId}`, {
+export async function deleteProject(project_id: string): Promise<void> {
+  const res = await fetch(`${API_URL}/projects/${project_id}`, {
     method: "DELETE",
     credentials: "include",
   });

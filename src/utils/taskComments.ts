@@ -2,12 +2,12 @@ import prisma from "../lib/prisma";
 
 /**
  * Récupère les commentaires d'une tâche avec les détails des auteurs
- * @param taskId - ID de la tâche
+ * @param task_id - ID de la tâche
  * @returns Les commentaires avec les détails des auteurs
  */
-export const getTaskComments = async (taskId: string) => {
+export const getTaskComments = async (task_id: string) => {
   const comments = await prisma.comment.findMany({
-    where: { taskId },
+    where: { task_id },
     include: {
       author: {
         select: {
@@ -17,14 +17,14 @@ export const getTaskComments = async (taskId: string) => {
         },
       },
     },
-    orderBy: { createdAt: "asc" },
+    orderBy: { created_at: "asc" },
   });
 
   return comments.map((comment) => ({
     id: comment.id,
     content: comment.content,
-    createdAt: comment.createdAt,
-    updatedAt: comment.updatedAt,
+    created_at: comment.created_at,
+    updated_at: comment.updated_at,
     author: comment.author,
   }));
 };

@@ -51,11 +51,11 @@ function KanbanColumn({
 
 export function Kanban({
   tasks,
-  projectId,
+  project_id,
   onUpdate,
 }: {
   tasks: Task[];
-  projectId: string;
+  project_id: string;
   onUpdate?: () => void;
 }) {
   const [items, setItems] = useState<Task[]>(tasks);
@@ -72,9 +72,9 @@ export function Kanban({
     const frontendStatus = (over.id as string).replace("col-", "");
     const newBackendStatus = FRONTEND_TO_BACKEND[frontendStatus as TaskStatus];
 
-    const projectIdToUse = projectId ?? task.project?.id;
+    const project_idToUse = project_id ?? task.project?.id;
 
-    if (!projectIdToUse || !task || !newBackendStatus) return;
+    if (!project_idToUse || !task || !newBackendStatus) return;
 
     // Mise à jour optimiste du state
     setItems((prev) =>
@@ -83,12 +83,12 @@ export function Kanban({
       )
     );
 
-    await updateTask(projectIdToUse, task.id, {
+    await updateTask(project_idToUse, task.id, {
       title: task.title,
       description: task.description ?? "",
       status: newBackendStatus,
       priority: task.priority,
-      dueDate: task.dueDate ?? undefined,
+      due_date: task.due_date ?? undefined,
       assigneeIds: task.assignees.map((a) => a.user.id),
     });
 

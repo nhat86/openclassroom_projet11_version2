@@ -59,18 +59,18 @@ export function Navbar() {
 
   const isDashboard = pathname?.startsWith("/dashboard");
   const isProjects = pathname?.startsWith("/projects");
-  const userId = user?.id ?? "";
+  const user_id = user?.id ?? "";
   const initials = getInitials(user?.name ?? null);
 
   return (
     <header className="bg-white border-b border-black/5 px-6 md:px-10 py-4 flex items-center justify-between gap-4">
-      <Link href={userId ? `/dashboard/${userId}` : "/login"}>
+      <Link href={user_id ? `/dashboard/${user_id}` : "/login"}>
         <Logo className="text-2xl" />
       </Link>
 
       <nav className="hidden sm:flex items-center gap-2">
         <Link
-          href={userId ? `/dashboard/${userId}` : "/login"}
+          href={user_id ? `/dashboard/${user_id}` : "/login"}
           className={`group flex w-[248px] items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors ${
             isDashboard
               ? "bg-black text-white"

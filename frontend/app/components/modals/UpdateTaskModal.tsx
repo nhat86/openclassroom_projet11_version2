@@ -30,7 +30,7 @@ export function UpdateTaskModal({
 }) {
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description ?? "");
-  const [dueDate, setDueDate] = useState(toInputDate(task.dueDate));
+  const [due_date, setdue_date] = useState(toInputDate(task.due_date));
   const [status, setStatus] = useState<TaskStatus>(
     getTaskStatus(task.status) ?? "A_FAIRE"
   );
@@ -47,7 +47,7 @@ export function UpdateTaskModal({
   const canSubmit =
     title.trim().length > 0 &&
     description.trim().length > 0 &&
-    dueDate.trim().length > 0;
+    due_date.trim().length > 0;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -59,7 +59,7 @@ export function UpdateTaskModal({
         description: description.trim(),
         status: FRONTEND_TO_BACKEND[status],
         priority: task.priority,
-        dueDate,
+        due_date,
         assigneeIds,
       });
       onUpdated();
@@ -108,8 +108,8 @@ export function UpdateTaskModal({
             <div className="relative">
               <input
                 type="date"
-                value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
+                value={due_date}
+                onChange={(e) => setdue_date(e.target.value)}
                 required
                 className="w-full border border-black/10 rounded-lg px-4 py-2.5 pr-10 text-sm outline-none focus:border-dark-orange"
               />

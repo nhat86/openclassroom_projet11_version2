@@ -16,8 +16,8 @@ export const getUserTasks = async (
     where:{
       project:{
         OR:[
-          {ownerId:authReq.user.id},
-          {members:{some:{userId:authReq.user.id}}},
+          {owner_id:authReq.user.id},
+          {members:{some:{user_id:authReq.user.id}}},
         ],
       },
     },
@@ -52,7 +52,7 @@ export const getUserTasks = async (
         },
       },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: { created_at: "desc" },
     });
     const priorityOrder: Record<string, number> = {
     URGENT: 1,
@@ -65,8 +65,8 @@ export const getUserTasks = async (
       const priorityB = priorityOrder[b.priority] || 5;
       if (priorityA !== priorityB) return priorityA - priorityB;
       else {
-        const dueA = a.dueDate ? new Date(a.dueDate).getTime() : Infinity;
-        const dueB = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
+        const dueA = a.due_date ? new Date(a.due_date).getTime() : Infinity;
+        const dueB = b.due_date ? new Date(b.due_date).getTime() : Infinity;
         return dueA - dueB;
       }
     }); 

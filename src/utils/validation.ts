@@ -256,7 +256,7 @@ export const validateCreateTaskData = (data: {
   title: string;
   description?: string;
   priority?: string;
-  dueDate?: string;
+  due_date?: string;
   assigneeIds?: string[];
 }): ValidationError[] => {
   const errors: ValidationError[] = [];
@@ -296,9 +296,9 @@ export const validateCreateTaskData = (data: {
   }
 
   // Validation de la date d'échéance
-  if (data.dueDate && !isValidDate(data.dueDate)) {
+  if (data.due_date && !isValidDate(data.due_date)) {
     errors.push({
-      field: "dueDate",
+      field: "due_date",
       message: "Format de date invalide (utilisez le format ISO)",
     });
   }
@@ -311,8 +311,8 @@ export const validateCreateTaskData = (data: {
         message: "Les assignations doivent être un tableau",
       });
     } else {
-      data.assigneeIds.forEach((userId, index) => {
-        if (!userId) {
+      data.assigneeIds.forEach((user_id, index) => {
+        if (!user_id) {
           errors.push({
             field: `assigneeIds[${index}]`,
             message: "L'ID de l'utilisateur assigné est invalide",
@@ -335,7 +335,7 @@ export const validateUpdateTaskData = (data: {
   description?: string;
   status?: string;
   priority?: string;
-  dueDate?: string;
+  due_date?: string;
   assigneeIds?: string[];
 }): ValidationError[] => {
   const errors: ValidationError[] = [];
@@ -392,12 +392,12 @@ export const validateUpdateTaskData = (data: {
 
   // Validation de la date d'échéance si fournie
   if (
-    data.dueDate !== undefined &&
-    data.dueDate &&
-    !isValidDate(data.dueDate)
+    data.due_date !== undefined &&
+    data.due_date &&
+    !isValidDate(data.due_date)
   ) {
     errors.push({
-      field: "dueDate",
+      field: "due_date",
       message: "Format de date invalide (utilisez le format ISO)",
     });
   }
@@ -410,8 +410,8 @@ export const validateUpdateTaskData = (data: {
         message: "Les assignations doivent être un tableau",
       });
     } else {
-      data.assigneeIds.forEach((userId, index) => {
-        if (!userId) {
+      data.assigneeIds.forEach((user_id, index) => {
+        if (!user_id) {
           errors.push({
             field: `assigneeIds[${index}]`,
             message: "L'ID de l'utilisateur assigné est invalide",

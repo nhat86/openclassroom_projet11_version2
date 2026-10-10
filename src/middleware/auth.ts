@@ -28,7 +28,7 @@ export const authenticateToken = async (
 
     // Récupérer l'utilisateur depuis la base de données
     const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
+      where: { id: decoded.user_id },
       select: {
         id: true,
         email: true,
@@ -80,7 +80,7 @@ export const optionalAuth = async (
 
     const decoded = verifyToken(token);
     const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
+      where: { id: decoded.user_id },
       select: {
         id: true,
         email: true,

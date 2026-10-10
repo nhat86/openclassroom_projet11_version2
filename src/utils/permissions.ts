@@ -3,24 +3,24 @@ import prisma from "../lib/prisma";
 
 /**
  * Vérifie si un utilisateur a accès à un projet
- * @param userId - ID de l'utilisateur
- * @param projectId - ID du projet
+ * @param user_id - ID de l'utilisateur
+ * @param project_id - ID du projet
  * @returns true si l'utilisateur a accès, false sinon
  */
 export const hasProjectAccess = async (
-  userId: string,
-  projectId: string
+  user_id: string,
+  project_id: string
 ): Promise<boolean> => {
   try {
     const project = await prisma.project.findFirst({
       where: {
-        id: projectId,
+        id: project_id,
         OR: [
-          { ownerId: userId },
+          { owner_id: user_id },
           {
             members: {
               some: {
-                userId: userId,
+                user_id: user_id,
               },
             },
           },
@@ -37,24 +37,24 @@ export const hasProjectAccess = async (
 
 /**
  * Vérifie si un utilisateur est administrateur d'un projet
- * @param userId - ID de l'utilisateur
- * @param projectId - ID du projet
+ * @param user_id - ID de l'utilisateur
+ * @param project_id - ID du projet
  * @returns true si l'utilisateur est admin, false sinon
  */
 export const isProjectAdmin = async (
-  userId: string,
-  projectId: string
+  user_id: string,
+  project_id: string
 ): Promise<boolean> => {
   try {
     const project = await prisma.project.findFirst({
       where: {
-        id: projectId,
+        id: project_id,
         OR: [
-          { ownerId: userId },
+          { owner_id: user_id },
           {
             members: {
               some: {
-                userId: userId,
+                user_id: user_id,
                 role: Role.ADMIN,
               },
             },
@@ -72,19 +72,19 @@ export const isProjectAdmin = async (
 
 /**
  * Vérifie si un utilisateur est propriétaire d'un projet
- * @param userId - ID de l'utilisateur
- * @param projectId - ID du projet
+ * @param user_id - ID de l'utilisateur
+ * @param project_id - ID du projet
  * @returns true si l'utilisateur est propriétaire, false sinon
  */
 export const isProjectOwner = async (
-  userId: string,
-  projectId: string
+  user_id: string,
+  project_id: string
 ): Promise<boolean> => {
   try {
     const project = await prisma.project.findFirst({
       where: {
-        id: projectId,
-        ownerId: userId,
+        id: project_id,
+        owner_id: user_id,
       },
     });
 
@@ -97,69 +97,69 @@ export const isProjectOwner = async (
 
 /**
  * Vérifie si un utilisateur peut créer des tâches dans un projet
- * @param userId - ID de l'utilisateur
- * @param projectId - ID du projet
+ * @param user_id - ID de l'utilisateur
+ * @param project_id - ID du projet
  * @returns true si l'utilisateur peut créer des tâches, false sinon
  */
 export const canCreateTasks = async (
-  userId: string,
-  projectId: string
+  user_id: string,
+  project_id: string
 ): Promise<boolean> => {
-  return await hasProjectAccess(userId, projectId);
+  return await hasProjectAccess(user_id, project_id);
 };
 
 /**
  * Vérifie si un utilisateur peut modifier/supprimer des tâches dans un projet
- * @param userId - ID de l'utilisateur
- * @param projectId - ID du projet
+ * @param user_id - ID de l'utilisateur
+ * @param project_id - ID du projet
  * @returns true si l'utilisateur peut modifier des tâches, false sinon
  */
 export const canModifyTasks = async (
-  userId: string,
-  projectId: string
+  user_id: string,
+  project_id: string
 ): Promise<boolean> => {
-  return await hasProjectAccess(userId, projectId);
+  return await hasProjectAccess(user_id, project_id);
 };
 
 /**
  * Vérifie si un utilisateur peut modifier un projet
- * @param userId - ID de l'utilisateur
- * @param projectId - ID du projet
+ * @param user_id - ID de l'utilisateur
+ * @param project_id - ID du projet
  * @returns true si l'utilisateur peut modifier le projet, false sinon
  */
 export const canModifyProject = async (
-  userId: string,
-  projectId: string
+  user_id: string,
+  project_id: string
 ): Promise<boolean> => {
-  return await isProjectAdmin(userId, projectId);
+  return await isProjectAdmin(user_id, project_id);
 };
 
 /**
  * Vérifie si un utilisateur peut supprimer un projet
- * @param userId - ID de l'utilisateur
- * @param projectId - ID du projet
+ * @param user_id - ID de l'utilisateur
+ * @param project_id - ID du projet
  * @returns true si l'utilisateur peut supprimer le projet, false sinon
  */
 export const canDeleteProject = async (
-  userId: string,
-  projectId: string
+  user_id: string,
+  project_id: string
 ): Promise<boolean> => {
-  return await isProjectOwner(userId, projectId);
+  return await isProjectOwner(user_id, project_id);
 };
 
 /**
  * Récupère le rôle d'un utilisateur dans un projet
- * @param userId - ID de l'utilisateur
- * @param projectId - ID du projet
+ * @param user_id - ID de l'utilisateur
+ * @param project_id - ID du projet
  * @returns Le rôle de l'utilisateur ou null s'il n'a pas accès
  */
 export const getUserProjectRole = async (
-  userId: string,
-  projectId: string
+  user_id: string,
+  project_id: string
 ): Promise<Role | null> => {
   try {
     // Vérifier si l'utilisateur est propriétaire
-    const isOwner = await isProjectOwner(userId, projectId);
+    const isOwner = await isProjectOwner(user_id, project_id);
     if (isOwner) {
       return Role.ADMIN;
     }
@@ -167,8 +167,8 @@ export const getUserProjectRole = async (
     // Vérifier le rôle dans les membres
     const membership = await prisma.projectMember.findFirst({
       where: {
-        userId: userId,
-        projectId: projectId,
+        user_id: user_id,
+        project_id: project_id,
       },
     });
 

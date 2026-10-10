@@ -37,13 +37,13 @@ export const createProject = async (
     const members = Array.isArray(contributorIds)
       ? contributorIds
           .filter((id: string) => id !== authReq.user!.id)
-          .map((userId: string) => ({ userId, role: "CONTRIBUTOR" }))
+          .map((user_id: string) => ({ user_id, role: "CONTRIBUTOR" }))
       : [];
     const project = await prisma.project.create({
       data: {
         name: name.trim(),
         description: description?.trim() ?? "",
-        ownerId: authReq.user.id,
+        owner_id: authReq.user.id,
         members: {
           create: members,
         },
@@ -79,8 +79,8 @@ export const getProject= async (req: Request, res: Response): Promise<void> => {
     const projects = await prisma.project.findMany({
       where: {
         OR: [
-          { ownerId: authReq.user.id },
-          { members: { some: { userId: authReq.user.id } } },
+          { owner_id: authReq.user.id },
+          { members: { some: { user_id: authReq.user.id } } },
         ],
       },
       include: {
@@ -92,7 +92,7 @@ export const getProject= async (req: Request, res: Response): Promise<void> => {
         },
         tasks: { select: { id: true, status: true } },
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: { created_at: "desc" },
     });
     sendSuccess(res, "Projets récupérés avec succès", { projects });
   } catch (error) {
@@ -134,10 +134,10 @@ export const getProjectById = async (
               include: {
                 author: { select: { id: true, name: true, email: true } },
               },
-              orderBy: { createdAt: "asc" },
+              orderBy: { created_at: "asc" },
             },
           },
-          orderBy: { createdAt: "desc" },
+          orderBy: { created_at: "desc" },
         },
       },
     });
@@ -148,9 +148,9 @@ export const getProjectById = async (
     }
 
     const isMember = project.members.some(
-      (member) => member.userId === authReq.user!.id
+      (member) => member.user_id === authReq.user!.id
     );
-    if (project.ownerId !== authReq.user.id && !isMember) {
+    if (project.owner_id !== authReq.user.id && !isMember) {
       sendError(res, "Accès refusé", "FORBIDDEN", 403);
       return;
     }
@@ -182,7 +182,7 @@ export const updateProject = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-    if (existingProject.ownerId !== authReq.user.id) {
+    if (existingProject.owner_id !== authReq.user.id) {
       sendError(res, "Non autorisé", "FORBIDDEN", 403);
       return;
     }
@@ -194,12 +194,12 @@ export const updateProject = async (req: Request, res: Response): Promise<void> 
 
     const members = Array.isArray(contributorIds)
       ? contributorIds
-          .filter((userId: string) => userId !== authReq.user!.id)
-          .map((userId: string) => ({ userId, role: "CONTRIBUTOR" }))
+          .filter((user_id: string) => user_id !== authReq.user!.id)
+          .map((user_id: string) => ({ user_id, role: "CONTRIBUTOR" }))
       : [];
 
     await prisma.projectMember.deleteMany({
-      where: { projectId: id },
+      where: { project_id: id },
     });
 
     const updatedProject = await prisma.project.update({
@@ -247,7 +247,7 @@ export const deleteProject = async (req: Request, res: Response): Promise<void> 
       return;
     }
  
-    if (project.ownerId !== authReq.user.id) {
+    if (project.owner_id !== authReq.user.id) {
       sendError(res, "Non autorisé", "FORBIDDEN", 403);
       return;
     }

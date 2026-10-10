@@ -79,7 +79,7 @@ export function TaskCard({
               height={14}
               style={{ width: "auto", height: "auto" }}
             />
-            {formatDate(task.dueDate)}
+            {formatDate(task.due_date)}
           </span>
           <span>|</span>
           <span className="flex items-center gap-1">
@@ -125,7 +125,7 @@ export function TaskCard({
               width={16}
               height={16}
             />
-            {formatDate(task.dueDate)}
+            {formatDate(task.due_date)}
           </span>
           <span>|</span>
           <span className="flex items-center gap-1">

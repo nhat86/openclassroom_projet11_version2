@@ -58,7 +58,7 @@ export interface AddContributorRequest {
 }
 
 export interface RemoveContributorRequest {
-  userId: string;
+  user_id: string;
 }
 
 // Types pour les tâches
@@ -66,7 +66,7 @@ export interface CreateTaskRequest {
   title: string;
   description?: string;
   priority?: "LOW" | "MEDIUM" | "HIGH" | "URGENT";
-  dueDate?: string; // ISO date string
+  due_date?: string; // ISO date string
   assigneeIds?: string[]; // IDs des utilisateurs assignés à la tâche
 }
 
@@ -75,7 +75,7 @@ export interface UpdateTaskRequest {
   description?: string;
   status?: "TODO" | "IN_PROGRESS" | "DONE" | "CANCELLED";
   priority?: "LOW" | "MEDIUM" | "HIGH" | "URGENT";
-  dueDate?: string; // ISO date string
+  due_date?: string; // ISO date string
   assigneeIds?: string[]; // IDs des utilisateurs assignés à la tâche
 }
 
@@ -90,7 +90,7 @@ export interface UpdateCommentRequest {
 
 // Types pour les tokens JWT
 export interface JwtPayload {
-  userId: string;
+  user_id: string;
   email: string;
   iat?: number;
   exp?: number;

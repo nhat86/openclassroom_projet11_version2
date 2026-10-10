@@ -10,7 +10,7 @@ type DraftTask = {
   description: string;
   status?: string;
   priority?: string;
-  dueDate?: string | null;
+  due_date?: string | null;
   assigneeIds?: string[];
 };
 
@@ -39,7 +39,7 @@ export const generateTasks = async (req: Request, res: Response): Promise<void> 
         description: "Définir la date et le canal de communication",
         status: "TODO",
         priority: "HIGH",
-        dueDate: "2026-10-01",
+        due_date: "2026-10-01",
         assigneeIds: [],
       },
       {
@@ -47,7 +47,7 @@ export const generateTasks = async (req: Request, res: Response): Promise<void> 
         description: "Rédiger le guide utilisateur",
         status: "TODO",
         priority: "MEDIUM",
-        dueDate: null,
+        due_date: null,
         assigneeIds: [],
       },
     ];
@@ -61,14 +61,14 @@ export const generateTasks = async (req: Request, res: Response): Promise<void> 
         return;
         }
         const user = authReq.user;
-        const { projectId } = req.params;
+        const { project_id } = req.params;
         const { prompt } = req.body;
         if(!prompt || prompt.trim().length<3){
             sendError(res, "Prompt requis", "BAD_REQUEST", 400);
             return;
         }
         const project = await prisma.project.findUnique({
-            where: {id: projectId},
+            where: {id: project_id},
         })
         if (!project) {
             sendError(res, "Projet non trouvé", "NOT_FOUND", 404);
@@ -76,14 +76,14 @@ export const generateTasks = async (req: Request, res: Response): Promise<void> 
         }
         
         const existingTasks = await prisma.task.findMany({
-            where: { projectId },
+            where: { project_id },
             select: {
                 id: true,
                 title: true,
                 description: true,
                 status: true,
                 priority: true,
-                dueDate: true,
+                due_date: true,
             },
         });
         let context = "Aucune tâche existante.";
@@ -154,7 +154,7 @@ export const generateTasks = async (req: Request, res: Response): Promise<void> 
             description: (t.description ?? "").trim(),
             status: "TODO",
             priority: "MEDIUM",
-            dueDate: null,
+            due_date: null,
             assigneeIds: [],
           }));
         sendSuccess(res, "Tâches générées", {
@@ -179,7 +179,7 @@ export const createTasksBatch = async (req: Request, res: Response): Promise<voi
       return;
     }
     const user = authReq.user;
-    const { projectId } = req.params;
+    const { project_id } = req.params;
     const { tasks } = req.body as { tasks: DraftTask[] };
  
     if (!Array.isArray(tasks) || tasks.length === 0) {
@@ -188,7 +188,7 @@ export const createTasksBatch = async (req: Request, res: Response): Promise<voi
     }
  
     const project = await prisma.project.findUnique({
-      where: { id: projectId },
+      where: { id: project_id },
     });
  
     if (!project) {
@@ -206,9 +206,9 @@ export const createTasksBatch = async (req: Request, res: Response): Promise<voi
               description: t.description?.trim() ?? null,
               status: "TODO",
               priority:"MEDIUM",
-              dueDate: null,
-              projectId,
-              creatorId: user.id,
+              due_date: null,
+              project_id,
+              creator_id: user.id,
             },
             include: {
               project: { select: { id: true, name: true } },
@@ -222,7 +222,7 @@ export const createTasksBatch = async (req: Request, res: Response): Promise<voi
                 include: {
                   author: { select: { id: true, name: true } },
                 },
-                orderBy: { createdAt: "asc" },
+                orderBy: { created_at: "asc" },
               },
             },
           })

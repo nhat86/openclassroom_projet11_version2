@@ -38,8 +38,8 @@ export default function ProjectDetailPage() {
     if (view === "calendrier") {
       list.sort(
         (a, b) =>
-          new Date(a.dueDate ?? "9999-12-31").getTime() -
-          new Date(b.dueDate ?? "9999-12-31").getTime()
+          new Date(a.due_date ?? "9999-12-31").getTime() -
+          new Date(b.due_date ?? "9999-12-31").getTime()
       );
     } else {
       list.sort(
@@ -83,9 +83,9 @@ export default function ProjectDetailPage() {
   if (!project) return <p>Projet introuvable.</p>;
 
   const isAdminOrOwner =
-      project.ownerId === user?.id ||
+      project.owner_id === user?.id ||
       project.members.some(
-        (m) => m.userId === user?.id && m.role === "ADMIN"
+        (m) => m.user_id === user?.id && m.role === "ADMIN"
       );
 
   return (
@@ -287,7 +287,7 @@ export default function ProjectDetailPage() {
         {/* Modale generate task by AI */}
         {showGenerateAi && project && (
           <GenerateAITasksModal
-            projectId={project.id}
+            project_id={project.id}
             onClose={() => setShowGenerateAi(false)}
             onCreated={() => id && getProjectById(id).then(setProject)}
           />

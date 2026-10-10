@@ -12,20 +12,20 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
       return;
     }
 
-    const { projectId } = req.params;
+    const { project_id } = req.params;
     const {
       title,
       description,
       status = "TODO",
       priority = "MEDIUM",
-      dueDate,
+      due_date,
       assigneeIds = [],
     } = req.body;
 
     const project = await prisma.project.findUnique({
-      where: { id: projectId },
+      where: { id: project_id },
       include: {
-        members: { where: { userId: authReq.user.id } },
+        members: { where: { user_id: authReq.user.id } },
       },
     });
 
@@ -35,7 +35,7 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
     }
 
     const isMember =
-      project.ownerId === authReq.user.id || project.members.length > 0;
+      project.owner_id === authReq.user.id || project.members.length > 0;
 
     if (!isMember) {
       sendError(res, "Non autorisé", "FORBIDDEN", 403);
@@ -50,7 +50,7 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
         sendError(res, "Description requise", "BAD_REQUEST", 400);
         return;
     }
-    if (!dueDate) {
+    if (!due_date) {
         sendError(res, "Échéance requise", "BAD_REQUEST", 400);
         return;
     }
@@ -61,14 +61,14 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
         description: description.trim(),
         status,
         priority,
-        dueDate: new Date(dueDate),
-        projectId,
-        creatorId: authReq.user.id,
+        due_date: new Date(due_date),
+        project_id,
+        creator_id: authReq.user.id,
         assignees: {
           create: Array.isArray(assigneeIds)
             ? assigneeIds
-                .filter((userId: string) => userId !== authReq.user!.id)
-                .map((userId: string) => ({ userId }))
+                .filter((user_id: string) => user_id !== authReq.user!.id)
+                .map((user_id: string) => ({ user_id }))
             : [],
         },
       },
@@ -83,7 +83,7 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
           include: {
             author: { select: { id: true, name: true } },
           },
-          orderBy: { createdAt: "asc" },
+          orderBy: { created_at: "asc" },
         },
       },
     });
@@ -103,17 +103,17 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
       return;
     }
 
-    const {projectId, taskId} = req.params;
-    const {title, description, status, priority, dueDate, assigneeIds} = req.body;
+    const {project_id, task_id} = req.params;
+    const {title, description, status, priority, due_date, assigneeIds} = req.body;
 
     const task = await prisma.task.findUnique({
-      where: {id: taskId},
+      where: {id: task_id},
       include: {
         project: {
           include: {
             members: {
               where: {
-                userId: authReq.user.id
+                user_id: authReq.user.id
               }
             }
           }
@@ -121,14 +121,14 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
       } 
     })
 
-    if (!task || task.projectId !== projectId){
+    if (!task || task.project_id !== project_id){
       sendError(res, "Tâche non trouvé", "NOT FOUND", 404);
       return;
     }
 
-    const isAuthor = task.creatorId === authReq.user.id;
+    const isAuthor = task.creator_id === authReq.user.id;
     const isAdminOrOwner =
-      task.project.ownerId === authReq.user.id ||
+      task.project.owner_id === authReq.user.id ||
       task.project.members.some((m) => m.role === "ADMIN");
     
     if (!isAuthor && !isAdminOrOwner){
@@ -136,7 +136,7 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
       return;
     }
 
-    await prisma.taskAssignee.deleteMany({where: {taskId}});
+    await prisma.taskAssignee.deleteMany({where: {task_id}});
     if (!title || title.trim().length < 2) {
       sendError(res, "Titre requis", "BAD_REQUEST", 400);
       return;
@@ -148,16 +148,16 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
     }
 
     const updatedTask = await prisma.task.update({
-      where: {id: taskId},
+      where: {id: task_id},
       data: {
         title: title?.trim(),
         description: description.trim(),
         status,
         priority,
-        dueDate: new Date(dueDate)?? undefined,
+        due_date: new Date(due_date)?? undefined,
         assignees: {
           create: Array.isArray(assigneeIds)
-          ? assigneeIds.map((userId:string) => ({userId}))
+          ? assigneeIds.map((user_id:string) => ({user_id}))
           : [],
         },
       },
@@ -173,7 +173,7 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
           include: {
             author: { select: { id: true, name: true } },
           },
-          orderBy: { createdAt: "asc" },
+          orderBy: { created_at: "asc" },
         },
       },
     });
@@ -193,25 +193,25 @@ export const deleteTask = async (req: Request, res: Response): Promise<void> => 
       return;
     }
  
-    const { projectId, taskId } = req.params;
+    const { project_id, task_id } = req.params;
  
     const task = await prisma.task.findUnique({
-      where: { id: taskId },
+      where: { id: task_id },
       include: {
         project: {
-          include: { members: { where: { userId: authReq.user.id } } },
+          include: { members: { where: { user_id: authReq.user.id } } },
         },
       },
     });
  
-    if (!task || task.projectId !== projectId) {
+    if (!task || task.project_id !== project_id) {
       sendError(res, "Tâche non trouvée", "NOT_FOUND", 404);
       return;
     }
  
-    const isAuthor = task.creatorId === authReq.user.id;
+    const isAuthor = task.creator_id === authReq.user.id;
     const isAdminOrOwner =
-      task.project.ownerId === authReq.user.id ||
+      task.project.owner_id === authReq.user.id ||
       task.project.members.some((m) => m.role === "ADMIN");
  
     if (!isAuthor && !isAdminOrOwner) {
@@ -219,7 +219,7 @@ export const deleteTask = async (req: Request, res: Response): Promise<void> => 
       return;
     }
  
-    await prisma.task.delete({ where: { id: taskId } });
+    await prisma.task.delete({ where: { id: task_id } });
  
     sendSuccess(res, "Tâche supprimée");
   } catch (error) {
