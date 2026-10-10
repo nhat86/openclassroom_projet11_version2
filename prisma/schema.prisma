@@ -38,7 +38,7 @@ model Project {
 
   // Relations
   owner_id     String
-  owner       User             @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  owner       User             @relation("ProjectOwner", fields: [owner_id], references: [id], onDelete: Cascade)
   members     ProjectMember[]
   tasks       Task[]
 
@@ -52,15 +52,15 @@ model ProjectMember {
 
   // Relations
   user_id    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   project_id String
-  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project   Project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, project_id])
   @@map("project_members")
 }
 
-model tasks {
+model Task {
   id          String   @id @default(cuid())
   title       String
   description String?
@@ -72,7 +72,7 @@ model tasks {
 
   // Relations
   project_id   String
-  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project     Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
   creator_id   String
   creator     User    @relation("TaskCreator", fields: [creator_id], references: [id])
   assignees   TaskAssignee[]
