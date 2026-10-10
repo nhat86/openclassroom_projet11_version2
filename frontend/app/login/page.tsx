@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 import { Logo } from "../components/Logo";
 import { login } from "../services/authService";
-import GoogleSignInButton from "../components/googleSigninButton";
+
 function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -85,9 +85,6 @@ function LoginForm() {
               </Link>
             </div>
           </form>
-          <div className="mt-4">
-            <GoogleSignInButton />
-          </div>
           <p className="text-sm mt-24 text-center">
             Pas encore de compte ?{" "}
             <Link
