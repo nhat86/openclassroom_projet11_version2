@@ -87,7 +87,7 @@ model TaskAssignee {
 
   // Relations
   task_id     String
-  task       Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  task       Task     @relation(fields: [task_id], references: [id], onDelete: Cascade)
   user_id     String
   user       User     @relation("TaskAssignee", fields: [user_id], references: [id], onDelete: Cascade)
 
@@ -103,7 +103,7 @@ model Comment {
 
   // Relations
   task_id    String
-  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  task      Task     @relation(fields: [task_id], references: [id], onDelete: Cascade)
   author_id  String
   author    User     @relation("CommentAuthor", fields: [author_id], references: [id], onDelete: Cascade)
 
