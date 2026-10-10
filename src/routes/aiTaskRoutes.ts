@@ -1,6 +1,6 @@
 import express from "express";
 import { authenticateToken } from "../middleware/auth";
-import { generateTasks, createTasksBatch } from "../controllers/aiTaskController";
+import { generateTasks, createTasksBatch } from "../controllers/AITaskController";
 
 const router = express.Router();
 router.use(authenticateToken);

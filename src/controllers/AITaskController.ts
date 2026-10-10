@@ -32,7 +32,6 @@ function parseTasksFromText(raw: string): DraftTask[] {
 }
 
 export const generateTasks = async (req: Request, res: Response): Promise<void> => {
-  console.log("MOCK_AI value:", process.env.MOCK_AI);
   if (process.env.MOCK_AI === "true") {
     const mockTasks = [
       {
@@ -87,7 +86,6 @@ export const generateTasks = async (req: Request, res: Response): Promise<void> 
                 dueDate: true,
             },
         });
-        console.log("[RAG] Tâches existantes :", JSON.stringify(existingTasks, null, 2));
         let context = "Aucune tâche existante.";
 
         if (existingTasks.length >0){
@@ -109,7 +107,6 @@ export const generateTasks = async (req: Request, res: Response): Promise<void> 
             )
             .join("\n\n");
             console.log("[RAG] Classement par similarité :", JSON.stringify(scored, null, 2));
-            console.log("[RAG] Contexte sélectionné :\n", context);
           }
         const systemPrompt = `
         Tu es un assistant de gestion de projet. Tu aides à générer des tâches pertinentes pour un projet à partir d'une demande utilisateur.
@@ -135,20 +132,17 @@ export const generateTasks = async (req: Request, res: Response): Promise<void> 
         - "description" : obligatoire
         - Uniquement ces 2 champs
         `;
-        console.log("[RAG] Prompt système :\n", systemPrompt);
         await new Promise((resolve) => setTimeout(resolve, 1100));
         
         const raw = await chatMistral([
             { role: "system", content: systemPrompt },
             { role: "user", content: prompt },
         ]);
-        console.log("[RAG] Réponse brute de Mistral :\n", raw);
         let tasks: DraftTask[] = [];
         try {
             tasks = parseTasksFromText(raw);
             } 
         catch (parseError) {
-            console.error("Mistral raw response:", raw);
             sendError(res, "Format de réponse IA invalide", "UNPROCESSABLE_ENTITY", 422);
             return;
         }
@@ -163,7 +157,6 @@ export const generateTasks = async (req: Request, res: Response): Promise<void> 
             dueDate: null,
             assigneeIds: [],
           }));
-        console.log("[RAG] Tâches générées :", JSON.stringify(valid, null, 2));
         sendSuccess(res, "Tâches générées", {
             tasks: valid.map((t) => ({
                 ...t,
