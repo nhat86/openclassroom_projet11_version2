@@ -17,7 +17,7 @@ model User {
   name      String?
   google_id  String?  @unique
   created_at DateTime @default(now())
-  updated_at DateTime @updated_at
+  updated_at DateTime @updatedAt
 
   // Relations
   ownedProjects     Project[]       @relation("ProjectOwner")
@@ -34,7 +34,7 @@ model Project {
   name        String
   description String?
   created_at   DateTime @default(now())
-  updated_at   DateTime @updated_at
+  updated_at   DateTime @updatedAt
 
   // Relations
   owner_id     String
@@ -56,7 +56,7 @@ model ProjectMember {
   project_id String
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, projectId])
+  @@unique([user_id, project_id])
   @@map("project_members")
 }
 
@@ -68,13 +68,13 @@ model tasks {
   priority    String   @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
   due_date     DateTime?
   created_at   DateTime @default(now())
-  updated_at   DateTime @updated_at
+  updated_at   DateTime @updatedAt
 
   // Relations
   project_id   String
   project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   creator_id   String
-  creator     User    @relation("TaskCreator", fields: [creatorId], references: [id])
+  creator     User    @relation("TaskCreator", fields: [creator_id], references: [id])
   assignees   TaskAssignee[]
   comments    Comment[]
 
@@ -89,7 +89,7 @@ model TaskAssignee {
   task_id     String
   task       Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   user_id     String
-  user       User     @relation("TaskAssignee", fields: [userId], references: [id], onDelete: Cascade)
+  user       User     @relation("TaskAssignee", fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([task_id, user_id])
   @@map("task_assignees")
@@ -99,13 +99,13 @@ model Comment {
   id        String   @id @default(cuid())
   content   String
   created_at DateTime @default(now())
-  updated_at DateTime @updated_at
+  updated_at DateTime @updatedAt
 
   // Relations
   task_id    String
   task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   author_id  String
-  author    User     @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  author    User     @relation("CommentAuthor", fields: [author_id], references: [id], onDelete: Cascade)
 
   @@map("comments")
 }
