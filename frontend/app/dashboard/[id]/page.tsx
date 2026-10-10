@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useParams } from "next/navigation";
 import Image from "next/image";
 import { Search } from "lucide-react";
 import { getProfile, type User } from "../../services/authService";
@@ -13,6 +14,8 @@ import { filteredTasks as filterTasks } from "../../../lib/searchTask";
 import Footer from "@/app/components/footer";
 
 export default function DashboardPage() {
+  const params = useParams();
+  const id = params.id as string;
   const [user, setUser] = useState<User | null>(null);
   const [view, setView] = useState<"liste" | "kanban">("liste");
   const [showCreateProject, setShowCreateProject] = useState(false);
