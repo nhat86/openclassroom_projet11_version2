@@ -8,7 +8,7 @@ import {
 } from "@dnd-kit/core";
 import { useState } from "react";
 import { Task } from "../services/taskService";
-import { getTaskStatus, statusOrder, getStatusInfo, FRONTEND_TO_BACKEND } from "../../lib/taskStatus";
+import { getTaskStatus, statusOrder, getStatusInfo, FRONTEND_TO_BACKEND, TaskStatus } from "../../lib/taskStatus";
 import { TaskCard } from "./TaskCard";
 import { updateTask } from "../services/taskService";
 
@@ -88,7 +88,7 @@ export function Kanban({
       description: task.description ?? "",
       status: newBackendStatus,
       priority: task.priority,
-      dueDate: task.dueDate,
+      dueDate: task.dueDate ?? undefined,
       assigneeIds: task.assignees.map((a) => a.user.id),
     });
 

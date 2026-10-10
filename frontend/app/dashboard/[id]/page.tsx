@@ -127,7 +127,7 @@ export default function DashboardPage() {
           <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-8">
             {loadingTasks && <p>Chargement des tâches...</p>}
             {errorTasks && <p className="text-red-600">{errorTasks}</p>}
-            {!loadingTasks && <Kanban tasks={tasks} />}
+            {!loadingTasks && <Kanban tasks={tasks} projectId={id} />}
           </div>
         )}
       </main>

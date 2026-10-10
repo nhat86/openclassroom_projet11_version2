@@ -1,3 +1,5 @@
+import { TaskStatus } from "./taskStatus";
+
 export type ProjectRole = "ADMIN" | "CONTRIBUTEUR";
 
 export const ROLE_LABEL: Record<ProjectRole, string> = {
