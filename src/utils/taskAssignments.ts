@@ -78,7 +78,7 @@ export const getTaskAssignments = async (task_id: string) => {
 
   return assignees.map((assignee) => ({
     id: assignee.id,
-    assignedAt: assignee.assignedAt,
+    assigned_at: assignee.assigned_at,
     user: assignee.user,
   }));
 };

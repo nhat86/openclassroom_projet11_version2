@@ -8,7 +8,6 @@ import {
   logout,
 } from "../controllers/authController";
 import { authenticateToken } from "../middleware/auth";
-import { googleLogin } from "../controllers/authController";
 const router = Router();
 
 /**
@@ -52,7 +51,5 @@ router.put("/profile", authenticateToken, updateProfile);
  * @body    { currentPassword: string, newPassword: string }
  */
 router.put("/password", authenticateToken, updatePassword);
-
-router.post("/google", googleLogin);
 
 export default router;

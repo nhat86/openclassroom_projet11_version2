@@ -49,7 +49,7 @@ CREATE TABLE "tasks" (
 -- CreateTable
 CREATE TABLE "task_assignees" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "assignedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "assigned_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "task_id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
     CONSTRAINT "task_assignees_task_id_fkey" FOREIGN KEY ("task_id") REFERENCES "tasks" ("id") ON DELETE CASCADE ON UPDATE CASCADE,

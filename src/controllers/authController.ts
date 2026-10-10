@@ -21,7 +21,6 @@ import {
   sendValidationError,
   sendServerError,
 } from "../utils/response";
-import { verifyGoogleToken } from "../lib/google";
 /**
  * @swagger
  * /auth/register:

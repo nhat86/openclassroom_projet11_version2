@@ -208,7 +208,7 @@ const options = {
             user: {
               $ref: "#/components/schemas/User",
             },
-            assignedAt: {
+            assigned_at: {
               type: "string",
               format: "date-time",
             },
