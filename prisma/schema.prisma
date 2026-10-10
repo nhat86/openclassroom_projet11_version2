@@ -15,9 +15,9 @@ model User {
   email     String   @unique
   password  String?
   name      String?
-  googleId  String?  @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  google_id  String?  @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updated_at
 
   // Relations
   ownedProjects     Project[]       @relation("ProjectOwner")
@@ -33,11 +33,11 @@ model Project {
   id          String   @id @default(cuid())
   name        String
   description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updated_at
 
   // Relations
-  ownerId     String
+  owner_id     String
   owner       User             @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: Cascade)
   members     ProjectMember[]
   tasks       Task[]
@@ -48,32 +48,32 @@ model Project {
 model ProjectMember {
   id        String   @id @default(cuid())
   role      String   @default("CONTRIBUTOR") // ADMIN ou CONTRIBUTOR
-  joinedAt  DateTime @default(now())
+  joined_at  DateTime @default(now())
 
   // Relations
-  userId    String
+  user_id    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  projectId String
+  project_id String
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@unique([userId, projectId])
   @@map("project_members")
 }
 
-model Task {
+model tasks {
   id          String   @id @default(cuid())
   title       String
   description String?
   status      String   @default("TODO") // TODO, IN_PROGRESS, DONE, CANCELLED
   priority    String   @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
-  dueDate     DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  due_date     DateTime?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updated_at
 
   // Relations
-  projectId   String
+  project_id   String
   project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  creatorId   String
+  creator_id   String
   creator     User    @relation("TaskCreator", fields: [creatorId], references: [id])
   assignees   TaskAssignee[]
   comments    Comment[]
@@ -83,28 +83,28 @@ model Task {
 
 model TaskAssignee {
   id         String   @id @default(cuid())
-  assignedAt DateTime @default(now())
+  assigned_at DateTime @default(now())
 
   // Relations
-  taskId     String
+  task_id     String
   task       Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  userId     String
+  user_id     String
   user       User     @relation("TaskAssignee", fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([taskId, userId])
+  @@unique([task_id, user_id])
   @@map("task_assignees")
 }
 
 model Comment {
   id        String   @id @default(cuid())
   content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  created_at DateTime @default(now())
+  updated_at DateTime @updated_at
 
   // Relations
-  taskId    String
+  task_id    String
   task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  authorId  String
+  author_id  String
   author    User     @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
 
   @@map("comments")
