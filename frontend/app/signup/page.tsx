@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Logo } from "../components/Logo";
 import { register } from "../services/authService";
-import GoogleSignInButton from "../components/googleSigninButton";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -97,10 +96,6 @@ export default function SignupPage() {
 
             {error && <p className="text-sm text-red-600">{error}</p>}
           </form>
-
-          <div className="mt-6">
-            <GoogleSignInButton />
-          </div>
 
           <p className="text-sm mt-24 text-center">
             Déjà inscrit ?{" "}
