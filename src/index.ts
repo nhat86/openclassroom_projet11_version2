@@ -50,14 +50,22 @@ if (process.env.FRONTEND_URL) {
   devOrigins.push(process.env.FRONTEND_URL);
 }
 
+const normalize = (FRONTEND_URL: string | undefined) => FRONTEND_URL?.replace(/\/$/, "");
+
+const allowedOrigins = [
+  ...devOrigins,
+  normalize(process.env.FRONTEND_URL),
+  "https://openclassroom-projet11-version2-omega.vercel.app",
+].filter(Boolean);
+
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === "production"
-        ? process.env.FRONTEND_URL
-          ? [process.env.FRONTEND_URL]
-          : ["https://openclassroom-projet11-version2-omega.vercel.app"]
-        : devOrigins,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      console.log("CORS blocked origin:", origin); // xem trong Logs của Render
+      return callback(null, false);
+    },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
