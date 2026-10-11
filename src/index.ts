@@ -66,6 +66,7 @@ app.use(
       console.log("CORS blocked origin:", origin); // xem trong Logs của Render
       return callback(null, false);
     },
+    credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
