@@ -56,7 +56,7 @@ app.use(
       process.env.NODE_ENV === "production"
         ? process.env.FRONTEND_URL
           ? [process.env.FRONTEND_URL]
-          : ["https://openclassroom-projet11-version2-s4e.vercel.app"]
+          : ["https://openclassroom-projet11-version2-omega.vercel.app"]
         : devOrigins,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
