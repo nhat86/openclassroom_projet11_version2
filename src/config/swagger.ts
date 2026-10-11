@@ -23,7 +23,7 @@ const options = {
         description: "Serveur de développement",
       },
       {
-        url: "https://api.example.com",
+        url: "https://gestion-de-taches-booste-a-lia.onrender.com",
         description: "Serveur de production",
       },
     ],

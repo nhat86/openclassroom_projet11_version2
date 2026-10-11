@@ -30,7 +30,7 @@ dotenv.config();
 
 // Créer l'application Express
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT;
 
 // Middleware pour parser les cookies
 app.use(cookieParser());
