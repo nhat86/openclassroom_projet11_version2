@@ -1,111 +1,143 @@
 "use client";
 
-import { useState } from "react";
-import { login } from "../services/authService";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { Logo } from "../components/Logo";
+import { login } from "../services/authService";
 
-export default function LoginPage() {
+function LoginForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    try {
-      await login(email, password);
-      window.location.href = "/dashboard";
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const fillDemo = (demoEmail: string, demoPassword: string) => {
     setEmail(demoEmail);
     setPassword(demoPassword);
   };
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setIsSubmitting(true);
 
+    try {
+      const user = await login(email, password);
+      router.push(`/dashboard/${user.id}`);
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "Une erreur est survenue lors de la connexion"
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Connexion</h1>
+    <div className="flex-1 grid grid-cols-1 md:grid-cols-[1fr_2fr] min-h-screen">
+      <div className="flex flex-col items-center justify-center px-10 sm:px-20 py-16 bg-white">
+        <Logo className="text-3xl mb-24" />
 
-        {error && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">
-            {error}
-          </div>
-        )}
+        <div className="max-w-sm w-full">
+          <h1 className="text-3xl font-bold text-dark-orange mb-8 text-center">Connexion</h1>
+          <form onSubmit={submit} className="space-y-5">
+            <div>
+              <label htmlFor="login-email" className="block text-sm mb-1.5">
+                Email
+              </label>
+              <input
+                id="login-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full border border-black/10 rounded-lg px-4 py-3 text-sm bg-white outline-none focus:border-dark-orange"
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="login-password" className="block text-sm mb-1.5">
+                Mot de passe
+              </label>
+              <input
+                id="login-password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full border border-black/10 rounded-lg px-4 py-3 text-sm bg-white outline-none focus:border-dark-orange"
+                required
+              />
+            </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Adresse email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Mot de passe
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 disabled:bg-blue-400"
-          >
-            {loading ? "Connexion..." : "Se connecter"}
-          </button>
-        </form>
-
-        <div className="mt-4 text-center">
-          <Link href="/signup" className="text-sm text-blue-600 hover:underline">
-            Pas encore de compte ? S'inscrire
-          </Link>
-        </div>
-
-        {/* Comptes de démonstration */}
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <h3 className="text-sm font-semibold text-gray-600 mb-3">
-            Comptes de démonstration
-          </h3>
-          <div className="space-y-2">
             <button
-              type="button"
-              onClick={() => fillDemo("alice@example.com", "P@ssword123")}
-              className="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+              type="submit"
+              disabled={isSubmitting}
+              className="block w-4/5 mx-auto py-3 rounded-lg font-medium bg-black text-white transition-colors disabled:opacity-70"
             >
-              <span className="font-medium">alice@example.com</span> / <span className="text-gray-400">Password123!</span>
+              {isSubmitting ? "Connexion..." : "Se connecter"}
             </button>
-            <button
-              type="button"
-              onClick={() => fillDemo("bob@example.com", "P@ssword123")}
-              className="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+            
+            {error && <p className="text-sm text-red-600">{error}</p>}
+
+            <div className="text-center">
+              <Link
+                href="#"
+                className="text-sm text-dark-orange underline underline-offset-2 "
+              >
+                Mot de passe oublié ?
+              </Link>
+            </div>
+          </form>
+          <p className="text-sm mt-24 text-center">
+            Pas encore de compte ?{" "}
+            <Link
+              href="/signup"
+              className="text-dark-orange underline underline-offset-2 font-medium"
             >
-              <span className="font-medium">bob@example.com</span> / <span className="text-gray-400">Password123!</span>
-            </button>
+              Créer un compte
+            </Link>
+          </p>
+          {/* Comptes de démonstration */}
+          <div className="mt-6 pt-6 border-t border-black/10">
+            <h3 className="text-sm font-semibold text-gray-600 mb-3">
+              Comptes de démonstration
+            </h3>
+            <div className="space-y-2">
+              <button
+                type="button"
+                onClick={() => fillDemo("alice@example.com", "P@ssword123")}
+                className="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+              >
+                <span className="font-medium">alice@example.com</span> / <span className="text-gray-400">Password123!</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => fillDemo("bob@example.com", "P@ssword123")}
+                className="w-full text-left px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+              >
+                <span className="font-medium">bob@example.com</span> / <span className="text-gray-400">Password123!</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
+      
+      <div
+        className="hidden md:block bg-cover bg-center"
+        style={{
+          backgroundImage: "url('/login_image.jpg')",
+        }}
+      />
+    </div>
+  );
+}
+export default function LoginPage() 
+{ 
+  return ( 
+    <div>
+      <Suspense fallback={null}> 
+          <LoginForm /> 
+      </Suspense> 
     </div>
   );
 }
