@@ -92,7 +92,7 @@ export default function DashboardPage() {
                 : "bg-white text-dark-orange hover:bg-black/5"
             }`}
           >
-            <Image src="/Union.png" alt="kanban" width={16} height={16} style={{ width: "auto", height: "auto" }}/>
+            <Image src="/kanban.png" alt="kanban" width={16} height={16} style={{ width: "auto", height: "auto" }}/>
             Kanban
           </button>
         </div>
